@@ -73,6 +73,17 @@ button:disabled{
     background:#666
     }
 
+#admin {
+  margin-top: 400px;
+}
+
+#scoreboard {
+  position: absolute;
+  z-index: 1000;
+  color: #ff0000;
+
+}
+
 .centered-form {
     background:#000;
     display:flex;

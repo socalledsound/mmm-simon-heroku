@@ -5,6 +5,7 @@ var localPlayers = [];
 var arcs = [];
 var colors = [];
 var localGame;
+var adminButtonsShown = false;
 
 var osc, env;
 var scoreboard = document.getElementById('scoreboard');
@@ -17,9 +18,14 @@ var messages = jQuery('#messages');
 var newMessage = messages.children('li:last-child');
 
 
+var startGameSound = new Howl({src: '/sounds/interfaceSounds/start-game.mp3'});
+var wrongAnswerSound = new Howl({src: '/sounds/interfaceSounds/wrong-answer.mp3'});
+var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
+
+
 function setup() {
 
-  createCanvas(1000,800);
+   createCanvas(1000,800);
  	background(0);
 	noStroke();
 	initReadyButton();
@@ -181,6 +187,27 @@ function playSound(index) {
 }
 
 
+function adminPageSetup() {
+  var startButton = $('<button>start game</button>');
+  var jamButton = $('<button>test sounds</button>');
+  var buttons = [startButton, jamButton];
+  console.log(buttons);
+  buttons.forEach((button)=> {
+    button.css({ "background" : "#fff00"});
+    button.css({ "margin-left" : "10px"});
+    button.css({ "margin-top" : "10px"});
+  });
+  $('#admin').append(startButton);
+  $('#admin').append(jamButton);
+
+  $(startButton).click(startGame);
+
+}
+
+function startGame() {
+  console.log("game started");
+  socket.emit('startGame');
+}
 
 
 //socket stuff
@@ -208,12 +235,21 @@ socket.on('connect', function () {
   });
 
 
+socket.on('adminSetup', function(){
+  if(!adminButtonsShown) {
+  adminPageSetup();
+  adminButtonsShown = true;
+  }
+
+})
+
+
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
    console.log(players);
 	players.forEach((player)=> {
     var li = $('<li></li>');
-    var borderColor = player.ready ?  "10px solid #ffff00" : player.color; 
+    var borderColor = player.ready ?  "10px solid #ffff00" : player.color;
     li.css({ "background-color" : player.color});
     li.css({ "color" : "white" });
      li.css({ "border" : borderColor});
@@ -224,18 +260,30 @@ socket.on('connect', function () {
   })
 
 
-  socket.on('updatePlayerReadyList', function(players){
-    var ul = $('<ul></ul>');
-    console.log(players);
-    players.forEach((player)=> {
-      var li = $('<li></li>');
-      li.css({ "background-color" : player.color});
-      li.css({ "color" : "white" });
-      li.css({ "border" : "10px solid #ffff00"});
-      ul.append(li.text(player.name));
-    })
-    $('#players').html(ul);
-  })
+  // socket.on('updatePlayerReadyList', function(players){
+  //   var ul = $('<ul></ul>');
+  //   console.log(players);
+  //   players.forEach((player)=> {
+  //     var li = $('<li></li>');
+  //     li.css({ "background-color" : player.color});
+  //     li.css({ "color" : "white" });
+  //     li.css({ "border" : "10px solid #ffff00"});
+  //     ul.append(li.text(player.name));
+  //   })
+  //   $('#players').html(ul);
+  // })
+
+
+socket.on('startClientGame', function(){
+    startGameSound.play();
+    scoreboard.innerHTML = "round " + currentRound;
+})
+
+
+
+
+
+
 
   socket.on('newMessage', function (message) {
 	var formattedTime = moment(message.createdAt).format('h:mm a');

@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 const {generateMessage} = require('./utils/message');
 const {isRealString}  = require('./utils/validation');
 const {Players}  = require('./utils/players');
+const {Game}  = require('./game/game-class');
 
 
 const publicPath = path.join(__dirname, '../public');
@@ -15,8 +16,14 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
- var players = new Players();
+var players = new Players();
+var numPlayers = 0;
 var adminName = 'polly';
+var noAdminYet = true;
+
+var game;
+
+
 app.use(express.static(publicPath));
 
 
@@ -41,41 +48,46 @@ io.on('connection', (socket) => {
     if(playerExists) {
       callback('that name is already taken');
     }
-
-    socket.join();
-
-    players.removePlayer(socket.id);
-
-
-    if (player.name === adminName) {
-      player.admin = true;
-      socket.emit('adminSetup');
-    }
     else {
-      player.admin = false;
+      socket.join();
+
+      players.removePlayer(socket.id);
+
+
+      if (player.name === adminName  && noAdminYet) {
+        player.admin = true;
+        socket.emit('adminSetup');
+        noAdminYet = false;
+      }
+      else {
+        player.admin = false;
+      }
+
+      console.log(player.name + " joined");
+      console.log(player.admin);
+      players.addPlayer(player);
+      //numPlayers=numPlayers+1;
+
+
+      //console.log(players.getPlayerList());
+      //get user list and emit it to all clients
+
+
+
+      // if(players.getPlayerReadyList() != null) {
+      //   io.emit('updatePlayerReadyList', players.getPlayerReadyList());
+      // }
+
+
+      io.emit('updatePlayerList', players.getPlayerList());
+
+        console.log(players);
+      // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+      // socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined the room`));
+
+      callback();
     }
 
-
-    players.addPlayer(player);
-
-
-    //console.log(players.getPlayerList());
-    //get user list and emit it to all clients
-
-
-
-    // if(players.getPlayerReadyList() != null) {
-    //   io.emit('updatePlayerReadyList', players.getPlayerReadyList());
-    // }
-
-
-    io.emit('updatePlayerList', players.getPlayerList());
-
-
-    // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-    // socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined the room`));
-
-    callback();
   })
 
 //   socket.on('createMessage', (message, callback) => {
@@ -99,15 +111,30 @@ io.on('connection', (socket) => {
     var currentPlayer = players.getPlayer(player.id);
     currentPlayer.ready = true;
     io.emit('updatePlayerList', players.getPlayerList());
+
     callback();
   })
 
 
+  socket.on('startGame', ()=>{
+    game = new Game(2);
+    game.init();
+    io.emit('startClientGame', game);
+  })
+
+
   socket.on('disconnect', () => {
+    console.log(players);
     var player = players.removePlayer(socket.id);
+    console.log(player);
+    if(player.admin){
+      noAdminYet = true;
+      }
+      console.log(noAdminYet);
     if(player) {
       io.emit('updatePlayerList', players.getPlayerList());
     //   io.emit('newMessage', generateMessage('admin', `${user.name} has left the room`));
     }
+
   });
 });

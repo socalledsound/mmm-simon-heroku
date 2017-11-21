@@ -1,8 +1,8 @@
 var Game = function(numPlayers) {
     this.numPlayers = numPlayers;
     this..radLimit =40;
-	this.diameter = 1800;
-	
+	  this.diameter = 1800;
+
     this.tempo = 300;
     this.memoryCounter = 0;
     this.arcs =[];
@@ -59,35 +59,7 @@ this.init = function() {
 
 
 
-this.playerTrigger = function(index){
-	if(!this.sequencePlaying) {
-		if(index === this.sequence[this.checkAnswerCounter]) {
-			this.trigArc(index);
-			playerResponses.push(index);
-			this.checkAnswerCounter = this.checkAnswerCounter + 1;
-			if(this.playerResponses.length === this.sequence.length) {
-				playerResponses = [];
-				currentRound = currentRound +1;
 
-				scoreboard.innerHTML = "round " + currentRound;
-				nextRound();
-			}
-		}
-		else {
-			wrongAnswerSound.play();
-			setTimeout(loseGame,200);
-			textSize(32);
-			fill(200,0,0);
-			text("YOU HAVE BEEN DEFEATED BY SIMON.",200,250);
-			text("TO TRY AGAIN PRESS START",270,600);
-			scoreboard.innerHTML = "";
-			gamePaused = true;
-			setTimeout(showStartButton,1000);
-		}
-
-	}
-
-}
 
 this.loseGame() {
 	loseGameSound.play();
@@ -107,7 +79,7 @@ function addStep(sequence) {
 	return sequence
 }
 
-function setChooseFrom() {
+this.setChooseFrom = function() {
 		if(pickedNums.length < allNums.length) {
 		chooseFrom = allNums.filter((num)=>{
 			return !pickedNums.includes(num)
@@ -131,78 +103,65 @@ this.nextRound = function() {
 	 },tempo);
 }
 
+//
+// this.trigArc = function(player) {
+// 	var currentArc = typeof player != 'undefined'? player : sequence[memoryCounter];
+// 	// var currentArc = sequence[memoryCounter];
+// 	arcs[currentArc].turnOn();
+// 	playSound(currentArc);
+// 	memoryCounter++;
+// 	if(memoryCounter == sequence.length) {
+//
+// 		clearInterval(thisRound);
+// 		sequencePlaying = false;
+// 		// setTimeout(nextRound, tempo);
+//
+// 		//setTimeout(awaitResponse, tempo);
+// 	}
+// }
+//
+//
+// function playSound(index) {
+// 	osc.freq(freqs[index]
+// 		);
+// 	env.play(osc);
+// }
+//
+// function awaitResponse() {
+// 	fill(210,110,20);
+// 	rect(width-110,0,100,1000);
+// 	// shrinkTimer = setInterval()
+// }
 
-this.trigArc = function(player) {
-	var currentArc = typeof player != 'undefined'? player : sequence[memoryCounter];
-	// var currentArc = sequence[memoryCounter];
-	arcs[currentArc].turnOn();
-	playSound(currentArc);
-	memoryCounter++;
-	if(memoryCounter == sequence.length) {
-
-		clearInterval(thisRound);
-		sequencePlaying = false;
-		// setTimeout(nextRound, tempo);
-
-		//setTimeout(awaitResponse, tempo);
-	}
-}
-
-
-function playSound(index) {
-	osc.freq(freqs[index]
-		);
-	env.play(osc);
-}
-
-function awaitResponse() {
-	fill(210,110,20);
-	rect(width-110,0,100,1000);
-	// shrinkTimer = setInterval()
-}
-
-
-
-
-var inCircle = function() {
-	if(mouseX < 1000 && mouseX > 0 && mouseY < 800 && mouseY > 0) {
-
-
-		if(dist(mouseX, mouseY, width/2, height/2) < diameter/2) {
-			return true
-		}
-	}
-}
-
-function whichArc(pos) {
-	arcs.filter((arc,i) => {
-
-			if (pos > arc.start_arc && pos < arc.end_arc){
-				console.log(arc.id);
-				return arc.id
-			}
-			else {
-				return 100
-			}
-
-		});
-}
-
-
-
-function getRad () {
-
-	var deltaX = (width/2 - mouseX);
-	var deltaY = (height/2 - mouseY);
-
-	// In radians
-	var rad =  Math.atan2(deltaY, deltaX) + Math.PI;
-	// var deg = Math.round(rad * (180 / Math.PI)) //In degrees
-	// console.log(degrees(rad));
-	return rad
-}
-
-function revertColor(i) {
-
-	arcs[i].fillColor = arcs[i].originalColor;
-}
+//
+// this.playerTrigger = function(index){
+// 	if(!this.sequencePlaying) {
+// 		if(index === this.sequence[this.checkAnswerCounter]) {
+// 			this.trigArc(index);
+// 			playerResponses.push(index);
+// 			this.checkAnswerCounter = this.checkAnswerCounter + 1;
+// 			if(this.playerResponses.length === this.sequence.length) {
+// 				playerResponses = [];
+// 				currentRound = currentRound +1;
+//
+// 				scoreboard.innerHTML = "round " + currentRound;
+// 				nextRound();
+// 			}
+// 		}
+// 		else {
+// 			wrongAnswerSound.play();
+// 			setTimeout(loseGame,200);
+// 			textSize(32);
+// 			fill(200,0,0);
+// 			text("YOU HAVE BEEN DEFEATED BY SIMON.",200,250);
+// 			text("TO TRY AGAIN PRESS START",270,600);
+// 			scoreboard.innerHTML = "";
+// 			gamePaused = true;
+// 			setTimeout(showStartButton,1000);
+// 		}
+//
+// 	}
+//
+// }
+//
+//

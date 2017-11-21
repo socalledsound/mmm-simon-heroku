@@ -14,6 +14,7 @@ class Players  {
             this.players = this.players.filter( (player) => player.id != id);
 
         }
+        console.log(this.players);
         return player
     }
 
