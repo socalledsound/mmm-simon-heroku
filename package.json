@@ -4,14 +4,12 @@
   "description": "multiplayer simon game",
   "main": "options.js",
   "scripts": {
-    "start": "node server/server.js",
-    "test": "mocha server/**/*.test.js",
-    "test-watch": "nodemon --exec 'npm test'"
+    "start": "node server/server.js"
   },
 
   "engines": {
   "node": "6.2.2"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/socalledsound/mmm-simon.git"
