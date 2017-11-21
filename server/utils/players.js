@@ -22,11 +22,11 @@ class Players  {
     }
 
 
-    getPlayerReadyList() {
-
-        return this.players.filter((player) => player.ready)
-
-    }
+    // getPlayerReadyList() {
+    //
+    //     return this.players.filter((player) => player.ready)
+    //
+    // }
 
     playerExists(name) {
         return this.players.find((player)=> player.name === name);

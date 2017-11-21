@@ -210,29 +210,29 @@ socket.on('connect', function () {
 
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
-  // console.log(players);
+   console.log(players);
 	players.forEach((player)=> {
-	  var li = $('<li></li>');
-	  console.log(player.color);
-	  li.css({ "background-color" : player.color.asString});
-	  li.css({ "color" : "white" });
-	  ul.append(li.text(player.name));
+    var li = $('<li></li>');
+    var borderColor = player.ready ?  "10px solid #ffff00" : player.color; 
+    li.css({ "background-color" : player.color});
+    li.css({ "color" : "white" });
+     li.css({ "border" : borderColor});
+    ul.append(li.text(player.name));
+	   })
 
-	})
-	$('#players').html(ul);
+	   $('#players').html(ul);
   })
 
 
   socket.on('updatePlayerReadyList', function(players){
     var ul = $('<ul></ul>');
+    console.log(players);
     players.forEach((player)=> {
       var li = $('<li></li>');
-
       li.css({ "background-color" : player.color});
       li.css({ "color" : "white" });
       li.css({ "border" : "10px solid #ffff00"});
       ul.append(li.text(player.name));
-
     })
     $('#players').html(ul);
   })

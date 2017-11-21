@@ -59,13 +59,17 @@ io.on('connection', (socket) => {
     players.addPlayer(player);
 
 
-
+    //console.log(players.getPlayerList());
     //get user list and emit it to all clients
-    io.emit('updatePlayerList', players.getPlayerList());
-    if(players.getPlayerReadyList() != null) {
-      io.emit('updatePlayerReadyList', players.getPlayerReadyList());
-    }
 
+
+
+    // if(players.getPlayerReadyList() != null) {
+    //   io.emit('updatePlayerReadyList', players.getPlayerReadyList());
+    // }
+
+
+    io.emit('updatePlayerList', players.getPlayerList());
 
 
     // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
@@ -94,7 +98,7 @@ io.on('connection', (socket) => {
   socket.on('playerReady',(player, callback)=> {
     var currentPlayer = players.getPlayer(player.id);
     currentPlayer.ready = true;
-    io.emit('updatePlayerReadyList', players.getPlayerReadyList());
+    io.emit('updatePlayerList', players.getPlayerList());
     callback();
   })
 
