@@ -4,12 +4,3 @@ var Player = function () {
 	this.color = "placeholder";
 	this.name = "placeholder";
 }
-
-
-	
-
-
-
-
-
-

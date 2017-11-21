@@ -3,7 +3,7 @@ var inCircle = function() {
 	if(mouseX < 1000 && mouseX > 0 && mouseY < 800 && mouseY > 0) {
 
 
-		if(dist(mouseX, mouseY, width/2, height/2) < diameter/2) {
+		if(dist(mouseX, mouseY, width/2, height/2) < options.diameter/2) {
 			return true
 		}
 	}

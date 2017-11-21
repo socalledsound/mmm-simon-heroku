@@ -23,7 +23,7 @@ app.use(express.static(publicPath));
 server.listen(port, () => {
     console.log(`Server is up on ${port}`);
   });
-  
+
 
 io.on('connection', (socket) => {
   console.log('New user connected');
@@ -31,11 +31,11 @@ io.on('connection', (socket) => {
 
 
   socket.on('join', (params, callback)=> {
-    
+
     if(!isRealString(params.name) ) {
       callback('name is required');
     }
-    
+
     var playerExists = players.playerExists(params.name);
     console.log("exists:"+ playerExists);
     if(playerExists) {
@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 
     players.removePlayer(socket.id);
 
-    
+
     if (params.name === adminName) {
       params['admin'] = true;
       socket.emit('adminSetup');
@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
 //     if(user && isRealString(message.text)) {
 //       io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
 //     }
-    
+
 //     callback();
 //   });
 
@@ -84,8 +84,16 @@ io.on('connection', (socket) => {
 //     if(user) {
 //       io.to(user.room).emit('newLocationMessage', generateLocationMessage(`${user.name} is at `, coords.latitude, coords.longitude));
 //     }
-    
+
 //   });
+
+  socket.on('playerReady',(player, callback)=> {
+    console.log("player received, is below");
+    console.log(player);
+    io.emit('updatePlayerReadyList', players.getPlayerList());
+    callback();
+  })
+
 
   socket.on('disconnect', () => {
     var player = players.removePlayer(socket.id);

@@ -1,11 +1,10 @@
 var Game = function(numPlayers) {
     this.numPlayers = numPlayers;
     this.radLimit =40;
-	this.diameter = 1800;
-	
+	  this.diameter = options.diamter;
+
     this.tempo = 300;
     this.memoryCounter = 0;
-    this.arcs =[];
     this.sequence = [];
     this.chooseFrom = [];
     this.pickedNums = [];
@@ -15,7 +14,6 @@ var Game = function(numPlayers) {
     this.currentRound = 0;
     this.allNums = Array.apply(null, Array(this.numPlayers));
     this.freqs = Array.apply(null, Array(this.numPlayers));
-    this.colors =  Array.apply(null, Array(this.numPlayers));
     this.sequencePlaying = false;
     this.checkAnswerCounter = 0;
     this.gamePaused = true;
@@ -35,18 +33,12 @@ this.init = function() {
   	this.allNums[i] = i;
   	});
 
-  this.colors.map((color,i) => {
-  	this.colors[i] = '#'+Math.floor(Math.random()*16777215).toString(16);
-  	});
+
 
   this.freqs.map((freq,i) => {
     	freqs[i] = 220+(i*50);
     	});
-   	for(var i=0; i<this.numPlayers; i++) {
-  		// console.log("begin arcLegnth:"+arcLength);
-  		this.arcs[i] = new ArcButton(i,width/2,height/2, options.arcDiameter, radians(i*options.arcLength), radians(options.arcLength+(i*options.arcLength)), options.colors[i%4]);
-  		 this.arcs[i].turnOff();
-  	};
+
 
 
 	scoreboard.innerHTML = "round " + currentRound;
@@ -59,35 +51,7 @@ this.init = function() {
 
 
 
-this.playerTrigger = function(index){
-	if(!this.sequencePlaying) {
-		if(index === this.sequence[this.checkAnswerCounter]) {
-			this.trigArc(index);
-			playerResponses.push(index);
-			this.checkAnswerCounter = this.checkAnswerCounter + 1;
-			if(this.playerResponses.length === this.sequence.length) {
-				playerResponses = [];
-				currentRound = currentRound +1;
 
-				scoreboard.innerHTML = "round " + currentRound;
-				nextRound();
-			}
-		}
-		else {
-			wrongAnswerSound.play();
-			setTimeout(loseGame,200);
-			textSize(32);
-			fill(200,0,0);
-			text("YOU HAVE BEEN DEFEATED BY SIMON.",200,250);
-			text("TO TRY AGAIN PRESS START",270,600);
-			scoreboard.innerHTML = "";
-			gamePaused = true;
-			setTimeout(showStartButton,1000);
-		}
-
-	}
-
-},
 
 this.loseGame = function() {
 	loseGameSound.play();
@@ -132,28 +96,7 @@ this.nextRound = function() {
 }
 
 
-this.trigArc = function(player) {
-	var currentArc = typeof player != 'undefined'? player : sequence[memoryCounter];
-	// var currentArc = sequence[memoryCounter];
-	arcs[currentArc].turnOn();
-	playSound(currentArc);
-	memoryCounter++;
-	if(memoryCounter == sequence.length) {
 
-		clearInterval(thisRound);
-		sequencePlaying = false;
-		// setTimeout(nextRound, tempo);
-
-		//setTimeout(awaitResponse, tempo);
-	}
-}
-
-
-function playSound(index) {
-	osc.freq(freqs[index]
-		);
-	env.play(osc);
-}
 
 function awaitResponse() {
 	fill(210,110,20);
@@ -162,49 +105,5 @@ function awaitResponse() {
 }
 
 
-
-
-var inCircle = function() {
-	if(mouseX < 1000 && mouseX > 0 && mouseY < 800 && mouseY > 0) {
-
-
-		if(dist(mouseX, mouseY, width/2, height/2) < diameter/2) {
-			return true
-		}
-	}
-}
-
-function whichArc(pos) {
-	arcs.filter((arc,i) => {
-
-			if (pos > arc.start_arc && pos < arc.end_arc){
-				console.log(arc.id);
-				return arc.id
-			}
-			else {
-				return 100
-			}
-
-		});
-}
-
-
-
-function getRad () {
-
-	var deltaX = (width/2 - mouseX);
-	var deltaY = (height/2 - mouseY);
-
-	// In radians
-	var rad =  Math.atan2(deltaY, deltaX) + Math.PI;
-	// var deg = Math.round(rad * (180 / Math.PI)) //In degrees
-	// console.log(degrees(rad));
-	return rad
-}
-
-function revertColor(i) {
-
-	arcs[i].fillColor = arcs[i].originalColor;
-}
 
 }
