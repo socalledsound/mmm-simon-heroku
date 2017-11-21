@@ -30,13 +30,13 @@ io.on('connection', (socket) => {
 
 
 
-  socket.on('join', (params, callback)=> {
+  socket.on('join', (player, callback)=> {
 
-    if(!isRealString(params.name) ) {
+    if(!isRealString(player.name) ) {
       callback('name is required');
     }
-
-    var playerExists = players.playerExists(params.name);
+    console.log(player.name);
+    var playerExists = players.playerExists(player.name);
     console.log("exists:"+ playerExists);
     if(playerExists) {
       callback('that name is already taken');
@@ -47,21 +47,25 @@ io.on('connection', (socket) => {
     players.removePlayer(socket.id);
 
 
-    if (params.name === adminName) {
-      params['admin'] = true;
+    if (player.name === adminName) {
+      player.admin = true;
       socket.emit('adminSetup');
     }
     else {
-      params['admin'] = false;
+      player.admin = false;
     }
 
 
-    players.addPlayer(socket.id, params.name, params.color, params.admin);
+    players.addPlayer(player);
 
 
 
     //get user list and emit it to all clients
     io.emit('updatePlayerList', players.getPlayerList());
+    if(players.getPlayerReadyList() != null) {
+      io.emit('updatePlayerReadyList', players.getPlayerReadyList());
+    }
+
 
 
     // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
@@ -88,9 +92,9 @@ io.on('connection', (socket) => {
 //   });
 
   socket.on('playerReady',(player, callback)=> {
-    console.log("player received, is below");
-    console.log(player);
-    io.emit('updatePlayerReadyList', players.getPlayerList());
+    var currentPlayer = players.getPlayer(player.id);
+    currentPlayer.ready = true;
+    io.emit('updatePlayerReadyList', players.getPlayerReadyList());
     callback();
   })
 

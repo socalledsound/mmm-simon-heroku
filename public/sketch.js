@@ -1,7 +1,7 @@
 
 var numPlayers = 6;
-var player;
-var players = [];
+var thisPlayer;
+var localPlayers = [];
 var arcs = [];
 var colors = [];
 var localGame;
@@ -23,7 +23,7 @@ function setup() {
  	background(0);
 	noStroke();
 	initReadyButton();
-	initOscillator();
+	//initOscillator();
 	welcomeMessage();
 
   colors.map((color,i) => {
@@ -60,7 +60,7 @@ function mousePressed() {
 			var clickedArc = arcs.filter((arc,i) => (pos > arc.start_arc && pos < arc.end_arc),this);
       console.log(clickedArc);
 //			var player = clickedArc[0].id;
-			playerTrigger(player);
+			playerTrigger(thisPlayer);
 		}
 	}
 
@@ -81,9 +81,9 @@ function initReadyButton() {
 function readyPlayer() {
 	background(0);
 	hideReadyButton();
-	player = new Player();
-
-  socket.emit("playerReady", player, function() {
+  thisPlayer.ready = true;
+  console.log(thisPlayer);
+  socket.emit("playerReady", thisPlayer, function() {
     console.log("player emit");
   })
 	// player.init();
@@ -189,9 +189,13 @@ socket.on('connect', function () {
 	console.log('Connected to server');
 
 	var params = $.deparam(window.location.search);
-	params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
+	// params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
+  // params['ready'] = false;
 
-	socket.emit('join', params, function(err){
+  thisPlayer = new Player(socket.id,params.name);
+
+
+	socket.emit('join', thisPlayer, function(err){
 	  if(err) {
 		  alert(err);
 		  window.location.href='/';
@@ -206,10 +210,11 @@ socket.on('connect', function () {
 
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
+  // console.log(players);
 	players.forEach((player)=> {
 	  var li = $('<li></li>');
-	  console.log(player);
-	  li.css({ "background-color" : player.color});
+	  console.log(player.color);
+	  li.css({ "background-color" : player.color.asString});
 	  li.css({ "color" : "white" });
 	  ul.append(li.text(player.name));
 
@@ -219,7 +224,17 @@ socket.on('connect', function () {
 
 
   socket.on('updatePlayerReadyList', function(players){
-    console.log("round trip has occurred");
+    var ul = $('<ul></ul>');
+    players.forEach((player)=> {
+      var li = $('<li></li>');
+
+      li.css({ "background-color" : player.color});
+      li.css({ "color" : "white" });
+      li.css({ "border" : "10px solid #ffff00"});
+      ul.append(li.text(player.name));
+
+    })
+    $('#players').html(ul);
   })
 
   socket.on('newMessage', function (message) {
