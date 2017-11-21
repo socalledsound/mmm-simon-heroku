@@ -1,11 +1,17 @@
-{
+-{
   "name": "zz-simon-player-game-server",
   "version": "1.0.0",
   "description": "multiplayer simon game",
   "main": "options.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/server.js",
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'"
   },
+
+  "engines": {
+  "node": "6.2.2"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/socalledsound/mmm-simon.git"
