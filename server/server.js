@@ -7,7 +7,7 @@ const socketIO = require('socket.io');
 const {generateMessage} = require('./utils/message');
 const {isRealString}  = require('./utils/validation');
 const {Players}  = require('./utils/players');
-const {Game}  = require('./game/game-class');
+const {Game}  = require('./game');
 
 
 const publicPath = path.join(__dirname, '../public');
@@ -109,28 +109,69 @@ io.on('connection', (socket) => {
 
   socket.on('playerReady',(player, callback)=> {
     var currentPlayer = players.getPlayer(player.id);
+    var readyPlayers = players.players.filter((player)=> player.ready === true);
+    console.log(readyPlayers);
     currentPlayer.ready = true;
+    console.log()
     io.emit('updatePlayerList', players.getPlayerList());
 
     callback();
   })
 
 
-  socket.on('startGame', ()=>{
-    game = new Game(2);
+  socket.on('startGame', (numPlayers)=>{
+    game = new Game(numPlayers);
     game.init();
     io.emit('startClientGame', game);
+    setTimeout(nextRound,500);
+  })
+
+  socket.on("checkMouseClick", (playerNumber)=>{
+    if(playerNumber === game.sequence[game.checkAnswerCounter]) {
+      game.checkAnswerCounter  = game.checkAnswerCounter + 1;
+    }
+    else {
+      io.emit("wrongAnswer");
+    }
   })
 
 
+   socket.on('playPattern', (numPlayers)=>{
+    game.numPlayers = numPlayers
+    setTimeout(nextPattern,500);
+  }) 
+
+  // socket.on('updateGame')
+
+  function nextPattern(){
+
+    console.log(game.sequence);
+    game.nextPattern(8);
+    // game.sequence = [0,1,1,0,1,1,1,0,0];
+    console.log(game.sequence);
+    io.emit('trigClientRound', game);
+
+  }
+
+
+  function nextRound(){
+    console.log(game.sequence);
+    game.nextRound();
+    game.sequence = [0,1,1,0,1,1,1,0,0];
+    console.log(game.sequence);
+    io.emit('trigClientRound', game);
+  }
+
+
   socket.on('disconnect', () => {
-    console.log(players);
     var player = players.removePlayer(socket.id);
-    console.log(player);
+
+    console.log(player.name+" left the game");
+
     if(player.admin){
       noAdminYet = true;
       }
-      console.log(noAdminYet);
+
     if(player) {
       io.emit('updatePlayerList', players.getPlayerList());
     //   io.emit('newMessage', generateMessage('admin', `${user.name} has left the room`));

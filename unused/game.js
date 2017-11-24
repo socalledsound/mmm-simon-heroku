@@ -1,3 +1,6 @@
+// const {ArcButton}  = require('./arcButton');
+
+
 var Game = function(numPlayers) {
     this.numPlayers = numPlayers;
     this..radLimit =40;
@@ -24,8 +27,8 @@ var Game = function(numPlayers) {
     this.loseGameSound = new Howl({src: 'lose-game.mp3'});
 
 this.init = function() {
-  this.startGameSound.play();
-  this.sequence = [];
+	this.startGameSound.play();
+	this.sequence = [];
 	this.chooseFrom = [];
 	this.pickedNums = [];
 	this.playerResponses = [];
