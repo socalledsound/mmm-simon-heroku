@@ -89,8 +89,8 @@ function mousePressed() {
 function initReadyButton() {
 	readyButton = $('<button>ready</button>');
 	readyButton.css({ "background" : "#000"});
-	readyButton.css({ "margin-left" : "20px"});
-	readyButton.css({ "margin-top" : "20px"});
+	readyButton.css({ "margin-left" : "10px"});
+	readyButton.css({ "margin-top" : "-120px"});
 	readyButton.css({ "margin-top" : "20px"});
 	readyButton.css({ "display" : "inline-block"});
 	readyButton.css({"width" : "200px"});
