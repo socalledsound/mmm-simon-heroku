@@ -34,7 +34,7 @@ var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
 
 function setup() {
 
-    cnv = createCanvas(600,400);
+    cnv = createCanvas(480,400);
     cnv.parent('game');
  	background(0);
 	noStroke();
@@ -64,8 +64,8 @@ function welcomeMessage() {
 	textSize(22);
 	fill(200,0,0);
 	// text("MY NAME IS SIMON.",350,100);
-	text("DO YOU WANT TO PLAY A GAME?",20,120);
-	text("PRESS THE READY BUTTON",20,220);
+	text("PRESS THE BUTTON",20,120);
+	text("TO JOIN THE GAME",20,220);
 }
 
 
@@ -87,16 +87,8 @@ function mousePressed() {
 }
 
 function initReadyButton() {
-	readyButton = $('<button>ready</button>');
-	readyButton.css({ "background" : "#000"});
-	readyButton.css({ "margin-left" : "10px"});
-	readyButton.css({ "margin-top" : "-120px"});
-	readyButton.css({ "margin-top" : "20px"});
-	readyButton.css({ "display" : "inline-block"});
-	readyButton.css({"width" : "200px"});
-	readyButton.css({"height" : "100px"});
-	readyButton.css({"border-radius" : "5%"});
-
+	readyButton = $('<button>join</button>');
+	readyButton.addClass('ready-button');
 	$('#game').append(readyButton);	 
    $(readyButton).click(readyPlayer);
 
