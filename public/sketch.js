@@ -2,6 +2,7 @@
 var numPlayers = 0;
 var thisPlayer;
 var localPlayers = [];
+var messages = [];
 var arcs = [];
 var colors = [];
 var localGame;
@@ -14,6 +15,7 @@ var scoreboard = document.getElementById('scoreboard');
 var startButton, jamButton, adminButtons;
 var readyButton;
 var cnv;
+var canvasBGcolor = 240;
 
 
 var timerColor = [0,0,0];
@@ -36,7 +38,7 @@ function setup() {
 
     cnv = createCanvas(480,400);
     cnv.parent('game');
- 	background(0);
+ 	background(canvasBGcolor);
 	noStroke();
 	initReadyButton();
 	//initOscillator();
@@ -59,6 +61,37 @@ function setup() {
 	//maybe start button does go back here actually, and then it triggers a 'loading' visual
 
 }
+
+
+function draw() {
+
+	background(canvasBGcolor);
+
+	if(typeof gameView != 'undefined') {
+		gameView.show();
+	}
+	
+	if(messages.length>0) {
+		
+		for(var i=0;i<messages.length;i++) {
+			messages[i].update();
+			messages[i].show();
+			if(messages[i].isDead) {
+				messages.splice(i,1);
+			}
+			
+		}
+
+		
+		
+	}
+console.log(messages.length);
+
+}
+
+
+
+
 
 function welcomeMessage() {
 	textSize(22);
@@ -99,7 +132,7 @@ function initReadyButton() {
 
 
 function readyPlayer() {
-	background(0);
+	background(canvasBGcolor);
 	hideReadyButton();
     thisPlayer.ready = true;
   	gamePaused = false;
@@ -362,16 +395,35 @@ socket.on("wrongAnswer", function(){
 
 
 
+jQuery('#message-form').on('submit', function (e) {
+	e.preventDefault();
+  
+	var messageTextbox = jQuery('[name=message]');
+  
+	socket.emit('createMessage', {
+	  text: messageTextbox.val()
+	}, function () {
+	  messageTextbox.val('')
+	});
+  });
+
+
+
 
   socket.on('newMessage', function (message) {
-	var formattedTime = moment(message.createdAt).format('h:mm a');
-	var template = jQuery('#message-template').html();
-	var html = Mustache.render(template, {
-	  text: message.text,
-	  from: message.from,
-	  createdAt: formattedTime
-	});
+	
+	var newMessage = new Message(message.color,message.text);
+	messages.push(newMessage);
+	
+	
+	// var formattedTime = moment(message.createdAt).format('h:mm a');
+	// var template = jQuery('#message-template').html();
+	// var html = Mustache.render(template, {
+	//   text: message.text,
+	//   from: message.from,
+	//   createdAt: formattedTime
+	// });
 
-	jQuery('#messages').append(html);
-	scrollToBottom();
+	// jQuery('#messages').append(html);
+	// scrollToBottom();
   });

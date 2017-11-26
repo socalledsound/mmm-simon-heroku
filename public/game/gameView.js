@@ -65,7 +65,9 @@ this.init = function() {
 }
 
 
-
+this.show = function () {
+    this.playerButton.show();
+}
 
 
 

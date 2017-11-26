@@ -90,14 +90,15 @@ io.on('connection', (socket) => {
 
   })
 
-//   socket.on('createMessage', (message, callback) => {
-//     var user = users.getUser(socket.id);
-//     if(user && isRealString(message.text)) {
-//       io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
-//     }
+  socket.on('createMessage', (message, callback) => {
+    console.log("message received at sderver")
+    var player = players.getPlayer(socket.id);
+    if(player && isRealString(message.text)) {
+      io.emit('newMessage', generateMessage(player.name, player.playerColor, message.text));
+    }
 
-//     callback();
-//   });
+    callback();
+  });
 
 //   socket.on('createLocationMessage', (coords) => {
 //     var user = users.getUser(socket.id);
@@ -127,17 +128,22 @@ io.on('connection', (socket) => {
   })
 
   socket.on("checkMouseClick", (playerNumber)=>{
-    if(playerNumber === game.sequence[game.checkAnswerCounter]) {
-      game.checkAnswerCounter  = game.checkAnswerCounter + 1;
-      game.rightAnswers  = game.rightAnswers +1;
-      if (game.rightAnswers === game.sequence.length) {
-          io.emit("wonRound");
+
+    if(typeof game != 'undefined') {
+      if(playerNumber === game.sequence[game.checkAnswerCounter]) {
+        game.checkAnswerCounter  = game.checkAnswerCounter + 1;
+        game.rightAnswers  = game.rightAnswers +1;
+        if (game.rightAnswers === game.sequence.length) {
+            io.emit("wonRound");
+        }
+
+      }
+      else {
+        io.emit("wrongAnswer");
       }
 
     }
-    else {
-      io.emit("wrongAnswer");
-    }
+
 
 
 

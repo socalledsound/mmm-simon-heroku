@@ -1,8 +1,9 @@
 // var moment = require('moment');
 
-var generateMessage = (from, text) => {
+var generateMessage = (from, color, text) => {
   return {
     from,
+    color,
     text,
     createdAt: 1
   };

@@ -40,7 +40,7 @@ button,button:hover{
 
 *  {
 
-    /* color:#fff; */
+    color:#fff;
     box-sizing:border-box;
     margin:0;
     padding:0;
@@ -131,6 +131,7 @@ button:disabled{
 }
 
 #message-form input{
+    color:#000000;
     width: 400px;
     height:40px;
     margin-left: 10px;
@@ -172,7 +173,7 @@ button:disabled{
 
 .list-players {
     overflow-y:scroll;
-    width:90px;
+    width:100px;
     height:100vh;
     color:#000;
     background-color:#837575;
