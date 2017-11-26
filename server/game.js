@@ -116,8 +116,8 @@ class Game {
 
     this.sequence = Array.apply(null, Array(patternLength));
     this.sequence.map((i,index)=>{
-      this.sequence[index] = Math.round(Math.random() * (this.numPlayers));
-      this.sequence[index] = Math.round(Math.random());
+      this.sequence[index] = Math.round((Math.random() * (this.numPlayers)));
+      // this.sequence[index] = Math.round(Math.random());
     })
     
     

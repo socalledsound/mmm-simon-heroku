@@ -129,10 +129,19 @@ io.on('connection', (socket) => {
   socket.on("checkMouseClick", (playerNumber)=>{
     if(playerNumber === game.sequence[game.checkAnswerCounter]) {
       game.checkAnswerCounter  = game.checkAnswerCounter + 1;
+      game.rightAnswers  = game.rightAnswers +1;
+      if (game.rightAnswers === game.sequence.length) {
+          io.emit("wonRound");
+      }
+
     }
     else {
       io.emit("wrongAnswer");
     }
+
+
+
+
   })
 
 
@@ -169,7 +178,7 @@ io.on('connection', (socket) => {
     console.log(player.name+" left the game");
 
     if(player.admin){
-      noAdminYet = true;
+      noAdminYet = true; 
       }
 
     if(player) {

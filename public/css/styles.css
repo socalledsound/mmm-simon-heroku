@@ -1,5 +1,5 @@
 
-.ready-button {
+/* .ready-button {
   background-color: rgb(200,200,200);
 background-color: rgb(20,20,20);
 color: rgb(220,0,0);
@@ -14,11 +14,11 @@ line-height: 1.8;
 appearance: none;
 box-shadow: none;
 outline:0;
-width:200px;
+width:40px;
 height:200px;
 border-color:rgb(0,0,0);
 border-radius: 50%;
-}
+} */
 
 .ready-button:hover {
   background-color: rgb(40,40,40);
@@ -34,8 +34,10 @@ button,button:hover{
 .chat__messages,.chat__sidebar ul{
     list-style-type:none
     }
+
 *  {
-    color:#fff;
+
+    /* color:#fff; */
     box-sizing:border-box;
     margin:0;
     padding:0;
@@ -44,11 +46,16 @@ button,button:hover{
     font-size:.95rem
     }
 
+    
+body {
+    background-color: #666;
+}
+
 canvas {
     /* float:right */
-    position:fixed;
-    left:130px;
-    top:0px;
+    /* position:fixed; */
+    /* left:130px;
+    top:100px; */
 }
 
 li,ul   {
@@ -70,19 +77,51 @@ button:hover{
 
 button:disabled{
     cursor:default;
-    background:#666
+    background:#666;
     }
 
+.central-container {
+    display: flex;
+   flex-direction:row;
+   height:200px;
+   width:100%;
+}
+
+.main {
+   display: flex;
+    background-color: #4d473d;  
+   color:#000;
+   flex-direction:column;
+   height:1000px;
+   width:600px;
+}
+
+
 #admin {
-  margin-top: 400px;
+  margin-top: 100px;
+  width:400px;
 }
 
 #scoreboard {
-  position: absolute;
+  /* position: absolute;
   z-index: 1000;
-  color: #ff0000;
+  color: #ff0000; */
 
 }
+
+
+#game {
+   /* width:400px; */
+   /* padding:10px; */
+}
+
+#text {
+    background-color: #ecdede;
+    margin-top:20px;
+    margin-bottom:20px;
+    /* padding:20px; */
+}
+
 
 .centered-form {
     background:#000;
@@ -113,12 +152,17 @@ button:disabled{
     border:1px solid #e1e1e1;
     padding:10px
 }
-.chat{display:flex}
-.chat__sidebar{
+/* .chat{
+    display:flex
+} */
+
+
+.list-players {
     overflow-y:scroll;
     width:130px;
     height:100vh;
-    background: #000;
+    color:#000;
+    background-color:#837575;
 
     /* background:-moz-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
     background:-webkit-gradient(linear,left top,right bottom,color-stop(0,rgba(49,84,129,1)),color-stop(100%,rgba(39,107,130,1)));
@@ -127,13 +171,37 @@ button:disabled{
     background:-ms-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
     background:linear-gradient(325deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%) */
 }
+
+.list-players ul {
+    list-style-type:none;
+}
+
+.list-players li{
+    border:1px solid #e1e1e1;
+    /* color:#837575; */
+    border-radius:5px;
+    margin:10px;   
+    padding:10px
+}
+
+.list-players h3{
+    
+    color:#000;
+    margin:10px 20px;
+    text-align:left
+}
+
+
+
+
+/* 
 .chat__footer,.chat__sidebar li{background:#e6eaee;padding:10px}.chat__sidebar h3{color:#e6eaee;margin:10px 20px;text-align:left}
 .chat__sidebar li{border:1px solid #e1e1e1;border-radius:5px;margin:10px}
-.chat__main{display:flex;flex-direction:column;height:100vh;width:100%}
+.chat__main{display:flex;flex-direction:column;height:100vh;width:60%}
 .chat__messages{flex-grow:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:10px}.chat__footer{display:flex;flex-shrink:0}
 .chat__footer form{flex-grow:1;display:flex}.chat__footer form *{margin-right:10px}.chat__footer input{border:none;padding:10px;flex-grow:1}
 .message{padding:10px}.message__title{display:flex;margin-bottom:5px}
 .message__title h4{font-weight:600;margin-right:10px}
 .message__title span{color:#999}@media (max-width:600px){*{font-size:1rem}.chat__sidebar{display:none}
 .chat__footer{flex-direction:column}
-.chat__footer form{margin-bottom:10px}.chat__footer button{margin-right:0}}
+.chat__footer form{margin-bottom:10px}.chat__footer button{margin-right:0}} */

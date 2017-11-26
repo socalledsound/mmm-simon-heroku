@@ -9,8 +9,13 @@ var gameView;
 var adminButtonsShown = false;
 
 var osc, env;
+
 var scoreboard = document.getElementById('scoreboard');
+var startButton, jamButton, adminButtons;
 var readyButton;
+var cnv;
+
+
 var timerColor = [0,0,0];
 var gamePaused = true;
 
@@ -29,7 +34,8 @@ var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
 
 function setup() {
 
-   createCanvas(1000,800);
+    cnv = createCanvas(600,400);
+    cnv.parent('game');
  	background(0);
 	noStroke();
 	initReadyButton();
@@ -55,11 +61,11 @@ function setup() {
 }
 
 function welcomeMessage() {
-	textSize(32);
+	textSize(22);
 	fill(200,0,0);
 	// text("MY NAME IS SIMON.",350,100);
-	text("DO YOU WANT TO PLAY A GAME?",260,220);
-	text("PRESS THE BUTTON WHEN YOU'RE READY",330,620);
+	text("DO YOU WANT TO PLAY A GAME?",20,120);
+	text("PRESS THE READY BUTTON",20,220);
 }
 
 
@@ -81,10 +87,18 @@ function mousePressed() {
 }
 
 function initReadyButton() {
+	readyButton = $('<button>ready</button>');
+	readyButton.css({ "background" : "#000"});
+	readyButton.css({ "margin-left" : "20px"});
+	readyButton.css({ "margin-top" : "20px"});
+	readyButton.css({ "margin-top" : "20px"});
+	readyButton.css({ "display" : "inline-block"});
+	readyButton.css({"width" : "200px"});
+	readyButton.css({"height" : "100px"});
+	readyButton.css({"border-radius" : "5%"});
 
-   	readyButton = createButton('ready').addClass('ready-button');
-   	readyButton.position(230,700);
-   	readyButton.mousePressed(readyPlayer);
+	$('#game').append(readyButton);	 
+   $(readyButton).click(readyPlayer);
 
 }
 
@@ -118,11 +132,11 @@ function readyPlayer() {
 
 
 function showReadyButton () {
-	readyButton.style("display", "inline-block");
+	readyButton.css({"display" : "inline-block"});
 }
 
 function hideReadyButton () {
-	readyButton.style("display", "none");
+	readyButton.css({"display" : "none"});
 }
 
 
@@ -228,11 +242,10 @@ function playSound(index) {
 
 
 function adminPageSetup() {
-  var startButton = $('<button>start game</button>');
-  var jamButton = $('<button>nextPattern</button>');
-  var buttons = [startButton, jamButton];
-  console.log(buttons);
-  buttons.forEach((button)=> {
+  startButton = $('<button>start game</button>');
+  jamButton = $('<button>nextPattern</button>');
+  adminButtons = [startButton, jamButton];
+  adminButtons.forEach((button)=> {
     button.css({ "background" : "#fff00"});
     button.css({ "margin-left" : "10px"});
     button.css({ "margin-top" : "10px"});
