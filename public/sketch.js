@@ -11,11 +11,13 @@ var adminButtonsShown = false;
 
 var osc, env;
 
-var scoreboard = document.getElementById('scoreboard');
+// var scoreboard = document.getElementById('scoreboard');
+var scoreboard;
+var currentScore = 0;
 var startButton, jamButton, adminButtons;
 var readyButton;
 var cnv;
-var canvasBGcolor = 240;
+var canvasBGcolor = 0;
 
 
 var timerColor = [0,0,0];
@@ -32,6 +34,9 @@ var newMessage = messages.children('li:last-child');
 var startGameSound = new Howl({src: '/sounds/interfaceSounds/start-game.mp3'});
 var wrongAnswerSound = new Howl({src: '/sounds/interfaceSounds/wrong-answer.mp3'});
 var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
+
+
+console.log("numPlauers init: : "+numPlayers);
 
 
 function setup() {
@@ -85,7 +90,7 @@ function draw() {
 		
 		
 	}
-console.log(messages.length);
+
 
 }
 
@@ -105,7 +110,7 @@ function welcomeMessage() {
 
 function mousePressed() {
 	if(!gamePaused) {
-		var clicked = inCircle();
+		var clicked = inRect();
 		if(clicked) {
 			// var pos = getRad();
 			// //var clickedArc = 10;
@@ -142,8 +147,10 @@ function readyPlayer() {
    }
 
 
-	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor); 
-    gameView.init();
+	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor, currentScore); 
+	gameView.init();
+	// scoreboard = new Scoreboard(currentScore);
+	// scoreboard.show();
     // localGame.memoryCounter = 0;
 
   console.log(thisPlayer);
@@ -267,33 +274,40 @@ function playSound(index) {
 
 
 function adminPageSetup() {
+	console.log("adminpage setup numplayers: "+ numPlayers);
   startButton = $('<button>start game</button>');
-  jamButton = $('<button>nextPattern</button>');
-  adminButtons = [startButton, jamButton];
+  repeat = $('<button>repeat pattern</button>');
+  adminButtons = [startButton, repeat];
   adminButtons.forEach((button)=> {
     button.css({ "background" : "#fff00"});
     button.css({ "margin-left" : "10px"});
     button.css({ "margin-top" : "10px"});
   });
   $('#admin').append(startButton);
-  $('#admin').append(jamButton);
+  $('#admin').append(repeat);
 
   $(startButton).click(startGame);
-  $(jamButton).click(playPattern);
+  $(repeat).click(repeatPattern);
 
 }
 
+
 function startGame() {
-  console.log("game started");
- 
-  socket.emit('startGame',numPlayers);
+  socket.emit('startGame');
+}
+
+function repeatPattern(){
+	console.log('repeat pattern sketch');
+	socket.emit('repeatPattern');
 }
 
 function playPattern(){
 	socket.emit('playPattern',numPlayers);
 }
 
-
+function updateScoreboard() {
+	gameView.scoreboard.increment();
+}
 //socket stuff
 
 socket.on('connect', function () {
@@ -331,20 +345,18 @@ socket.on('adminSetup', function(){
 
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
-   console.log(players);
-   localPlayers=players;
-   readyPlayers = players.filter((player)=> player.ready === true).length;
 
-   console.log(thisPlayer.name+ "'s number is' : "+ thisPlayer.playerNumber);
-   
-   numPlayers = readyPlayers.length;
+   localPlayers=players;
+   readyPlayers = players.filter((player)=> player.ready === true).length; 
+	numPlayers = readyPlayers;
+
 	players.forEach((player)=> {
 		console.log(player.playerColor);
     var li = $('<li></li>');
     var borderColor = player.ready ?  "10px solid #ffff00" : player.playerColor;
     li.css({ "background-color" : player.playerColor});
      li.css({ "background" : player.playerColor});
-    li.css({ "color" : "white" });
+    li.css({ "color" : "#000" });
      li.css({ "border" : borderColor});
     ul.append(li.text(player.name));
 	   })
@@ -370,7 +382,7 @@ socket.on('adminSetup', function(){
 socket.on('startClientGame', function(game){
 	 
     startGameSound.play();
-    scoreboard.innerHTML = "round " + game.currentRound;
+    // scoreboard.innerHTML = "round " + game.currentRound;
     localGame = game;
     // console.log(localGame.numPlayers);
 
@@ -393,7 +405,10 @@ socket.on("wrongAnswer", function(){
 	loseGameSound.play();
 })
 
-
+socket.on("wonRound", function(){
+	// wonRoundSound.play();
+	updateScoreboard();
+})
 
 jQuery('#message-form').on('submit', function (e) {
 	e.preventDefault();

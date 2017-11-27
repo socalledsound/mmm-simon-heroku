@@ -109,18 +109,16 @@ io.on('connection', (socket) => {
 //   });
 
   socket.on('playerReady',(player, callback)=> {
-    var currentPlayer = players.getPlayer(player.id);
-    var readyPlayers = players.players.filter((player)=> player.ready === true);
-    console.log(readyPlayers);
+    var currentPlayer = players.getPlayer(player.id); 
     currentPlayer.ready = true;
-    console.log()
     io.emit('updatePlayerList', players.getPlayerList());
 
     callback();
   })
 
 
-  socket.on('startGame', (numPlayers)=>{
+  socket.on('startGame', ()=>{
+    var numPlayers = players.players.filter((player)=> player.ready === true).length;
     game = new Game(numPlayers);
     game.init();
     io.emit('startClientGame', game);
@@ -132,9 +130,17 @@ io.on('connection', (socket) => {
     if(typeof game != 'undefined') {
       if(playerNumber === game.sequence[game.checkAnswerCounter]) {
         game.checkAnswerCounter  = game.checkAnswerCounter + 1;
-        game.rightAnswers  = game.rightAnswers +1;
-        if (game.rightAnswers === game.sequence.length) {
-            io.emit("wonRound");
+        game.numRightAnswers  = game.numRightAnswers +1;
+        game.answered.push(playerNumber);
+        console.log("sequence: "+ game.sequence);
+        console.log("answered: "+game.answered);
+        console.log(game.numRightAnswers+" right");
+        console.log(game.sequence.length+" long");
+        if (game.numRightAnswers === game.sequence.length) {
+          game.currentRound =game.currentRound +1;
+          setTimeout(nextRound,500);  
+          io.emit("wonRound");
+           
         }
 
       }
@@ -156,6 +162,14 @@ io.on('connection', (socket) => {
     setTimeout(nextPattern,500);
   }) 
 
+  socket.on('repeatPattern', ()=>{
+    console.log("repeat");
+    game.resetAnswers();
+    
+
+    io.emit('trigClientRound', game);
+  }) 
+
   // socket.on('updateGame')
 
   function nextPattern(){
@@ -170,9 +184,10 @@ io.on('connection', (socket) => {
 
 
   function nextRound(){
+   
     console.log(game.sequence);
     game.nextRound();
-    game.sequence = [0,1,1,0,1,1,1,0,0];
+    // game.sequence = [0,1,1,0,1,1,1,0,0];
     console.log(game.sequence);
     io.emit('trigClientRound', game);
   }

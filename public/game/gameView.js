@@ -1,4 +1,4 @@
-var GameView = function(numPlayers,playerNumber, playerColor) {
+var GameView = function(numPlayers,playerNumber, playerColor, score) {
     this.numPlayers = numPlayers;
     this.playerNumber = playerNumber;
     this.playerColor = playerColor;
@@ -6,7 +6,9 @@ var GameView = function(numPlayers,playerNumber, playerColor) {
 	this.diameter = options.diameter;
 	this.arcLength = 360/this.numPlayers;
 	this.arcs=[];
-	this.playerButton;
+    this.playerButton;
+    this.scoreboard;
+    this.currentScore = score;
 	
 
     // this.tempo = 300;
@@ -55,8 +57,9 @@ var GameView = function(numPlayers,playerNumber, playerColor) {
 
 this.init = function() {
 
-	this.playerButton = new PlayerButton(this.playerNumber, this.playerColor)
-
+    this.playerButton = new PlayerButton(this.playerNumber, this.playerColor);
+    this.scoreboard = new Scoreboard(this.currentScore);
+   
 	//  	for(var i=0; i<numPlayers; i++) {
 	// 	// console.log("begin arcLegnth:"+arcLength);
 	// 	this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), colors[i%4]);
@@ -67,6 +70,7 @@ this.init = function() {
 
 this.show = function () {
     this.playerButton.show();
+    this.scoreboard.update();
 }
 
 

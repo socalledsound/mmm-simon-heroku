@@ -8,12 +8,14 @@ class Game {
       this.memoryCounter = 0;
       this.arcs =[];
       this.sequence = [];
+      this.answered = [];
+      this.numRightAnswers = 0;
       this.chooseFrom = [];
       this.pickedNums = [];
       this.players = [];
       this.playerButtons = [];
       this.playerResponses = [];
-      this.currentRound = 0;
+      this.currentRound = 1;
       this.allNums = Array.apply(null, Array(this.numPlayers));
       this.freqs = Array.apply(null, Array(this.numPlayers));
       this.colors =  Array.apply(null, Array(this.numPlayers));
@@ -27,6 +29,7 @@ class Game {
     this.addStep = this.addStep.bind(this);
     this.setChooseFrom = this.setChooseFrom.bind(this);
     this.nextRound = this.nextRound.bind(this);
+    this.shuffle = this.shuffle.bind(this);
     }
 
 
@@ -94,12 +97,49 @@ class Game {
   }
 
 
+  // nextRound() {
+  //   this.gamePaused = true;
+  //   this.sequencePlaying = true;
+  //   this.checkAnswerCounter = 0;
+  //   this.memoryCounter = 0;
+  //   this.sequence = this.addStep(this.sequence);
+  //   console.log("sequence: " + this.sequence);
+  //   return this.sequence
+
+  //    // setTimeout(function() {
+  //    //   thisRound = setInterval(trigArc, tempo);
+  //    // },tempo);
+  // }
+
+  resetAnswers() {
+    this.checkAnswerCounter = 0;
+    this.memoryCounter = 0;
+    this.numRightAnswers = 0;
+    this.answered = [];
+  }
+
+
   nextRound() {
     this.gamePaused = true;
     this.sequencePlaying = true;
     this.checkAnswerCounter = 0;
     this.memoryCounter = 0;
-    this.sequence = this.addStep(this.sequence);
+    this.numRightAnswers = 0;
+    this.answered = [];
+    this.sequence = Array.apply(null, Array(this.numPlayers));
+
+    var sequenceLength = this.sequence.length*this.currentRound;
+    console.log(sequenceLength);
+
+    for(var i=0;i<sequenceLength;i++) {
+      this.sequence[i] = i%this.numPlayers;
+    }
+    
+
+      this.sequence = this.shuffle(this.sequence);
+
+      
+
     console.log("sequence: " + this.sequence);
     return this.sequence
 
@@ -107,6 +147,30 @@ class Game {
      //   thisRound = setInterval(trigArc, tempo);
      // },tempo);
   }
+
+
+
+  shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
+
+
 
   nextPattern(patternLength) {
     this.gamePaused = true;

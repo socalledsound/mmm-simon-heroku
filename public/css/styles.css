@@ -40,7 +40,7 @@ button,button:hover{
 
 *  {
 
-    color:#fff;
+    color:#756d6d;
     box-sizing:border-box;
     margin:0;
     padding:0;
@@ -192,6 +192,7 @@ button:disabled{
 
 .list-players li{
     border:1px solid #e1e1e1;
+    color:#666;
     /* color:#837575; */
     border-radius:5px;
     margin:10px;   
