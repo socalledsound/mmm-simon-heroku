@@ -1,7 +1,7 @@
 
 .ready-button {
   background-color: rgb(200,200,200);
-background-color: rgb(20,20,20);
+/* background-color: rgb(20,20,20); */
 color: rgb(220,0,0);
 display: inline-block;
 /* margin: 0 10px 0 0; */
@@ -14,7 +14,7 @@ line-height: 1.8;
 appearance: none;
 box-shadow: none;
 outline:0;
-width:300px;
+width:380px;
 height:100px;
 border-color:rgb(0,0,0);
 border-radius: 5%;
@@ -49,7 +49,7 @@ button,button:hover{
     font-size:.95rem
     }
 
-    
+
 body {
     background-color: #666;
 }
@@ -93,11 +93,14 @@ button:disabled{
 
 .main {
    display: flex;
-    background-color: #4d473d;  
+    background-color: #4d473d;
+    background-color: #393163;
+    background-color: #090138;
+    background-color:#3a1601;
    color:#000;
    flex-direction:column;
    height:1000px;
-   width:320px;
+   width:400px;
 }
 
 
@@ -121,18 +124,20 @@ button:disabled{
 
 #message-wrapper {
     background-color: #b09d9d;
+    background-color: #615966;
     margin-top:20px;
     margin-bottom:20px;
     margin-left:10px;
-    padding-top:30px;
-    padding-bottom: 30px;
-    width:300px;
-    
+    padding-top:5px;
+    padding-bottom: 5px;
+    width:380px;
+    border-radius:5px;
+
 }
 
 #message-form input{
     color:#000000;
-    width: 220px;
+    width: 290px;
     height:40px;
     margin-left: 10px;
 }
@@ -172,11 +177,13 @@ button:disabled{
 
 
 .list-players {
-    overflow-y:scroll;
-    width:180px;
+    /* overflow-y:scroll; */
+    width:160px;
     height:100vh;
     color:#000;
     background-color:#837575;
+    background-color: #42d9f4;
+    background-color: #a0d3f7;
 
     /* background:-moz-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
     background:-webkit-gradient(linear,left top,right bottom,color-stop(0,rgba(49,84,129,1)),color-stop(100%,rgba(39,107,130,1)));
@@ -195,23 +202,63 @@ button:disabled{
     color:#666;
     /* color:#837575; */
     border-radius:5px;
-    margin:10px;   
+    margin:10px;
     padding:10px;
-    font-size: 30px;
+    font-size: 22px;
 }
 
 .list-players h3{
-    
+
     color:#000;
-    margin:30px 30px;
+    margin:30px 20px;
     text-align:left;
-    font-size: 30px;
+    font-size: 22px;
 }
 
 
 
 
-/* 
+.list-sounds {
+    /* overflow-y:scroll; */
+    width:160px;
+    height:100vh;
+    color:#000;
+    background-color:#837575;
+    background-color: #42d9f4;
+
+    /* background:-moz-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
+    background:-webkit-gradient(linear,left top,right bottom,color-stop(0,rgba(49,84,129,1)),color-stop(100%,rgba(39,107,130,1)));
+    background:-webkit-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
+    background:-o-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
+    background:-ms-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
+    background:linear-gradient(325deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%) */
+}
+
+.list-sounds ul {
+    list-style-type:none;
+}
+
+.list-sounds li{
+    border:1px solid #e1e1e1;
+    color:#666;
+    /* color:#837575; */
+    border-radius:5px;
+    margin:10px;
+    padding:10px;
+    font-size: 22px;
+}
+
+.list-sounds h3{
+
+    color:#000;
+    margin:30px 20px;
+    text-align:left;
+    font-size: 22px;
+}
+
+
+
+/*
 .chat__footer,.chat__sidebar li{background:#e6eaee;padding:10px}.chat__sidebar h3{color:#e6eaee;margin:10px 20px;text-align:left}
 .chat__sidebar li{border:1px solid #e1e1e1;border-radius:5px;margin:10px}
 .chat__main{display:flex;flex-direction:column;height:100vh;width:60%}

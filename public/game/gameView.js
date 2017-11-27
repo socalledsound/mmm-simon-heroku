@@ -3,12 +3,14 @@ var GameView = function(numPlayers,playerNumber, playerColor, score) {
     this.playerNumber = playerNumber;
     this.playerColor = playerColor;
     this.radLimit =40;
-	this.diameter = options.diameter;
+	this.diameter = 800;
 	this.arcLength = 360/this.numPlayers;
 	this.arcs=[];
     this.playerButton;
+    this.sequencePlaying = false;
     this.scoreboard;
     this.currentScore = score;
+
 	
 
     // this.tempo = 300;
@@ -60,16 +62,37 @@ this.init = function() {
     this.playerButton = new PlayerButton(this.playerNumber, this.playerColor);
     this.scoreboard = new Scoreboard(this.currentScore);
    
-	//  	for(var i=0; i<numPlayers; i++) {
-	// 	// console.log("begin arcLegnth:"+arcLength);
-	// 	this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), colors[i%4]);
-	// 	this.arcs[i].turnOff();
-	// };
+	 	for(var i=0; i<this.numPlayers; i++) {
+		// console.log("begin arcLegnth:"+arcLength);
+		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
+		this.arcs[i].turnOff();
+	};
+}
+
+
+this.updatePlayers = function(numPlayers) {
+    this.numPlayers = numPlayers;
+    this.arcLength = 360/this.numPlayers;
+    for(var i=0; i<this.numPlayers; i++) {
+        // console.log("begin arcLegnth:"+arcLength);
+        
+		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
+		this.arcs[i].turnOff();
+	};
 }
 
 
 this.show = function () {
-    this.playerButton.show();
+    
+      this.playerButton.show();
+    
+    if(this.sequencePlaying) {
+        for(var i=0; i<this.numPlayers; i++) {
+            this.arcs[i].show();
+            // console.log(this.arcs[i].isOn);
+        }
+    }
+    
     this.scoreboard.update();
 }
 

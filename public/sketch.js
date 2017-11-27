@@ -16,8 +16,9 @@ var scoreboard;
 var currentScore = 0;
 var startButton, jamButton, adminButtons;
 var readyButton;
+var soundButtons = [];
 var cnv;
-var canvasBGcolor = 0;
+var canvasBGcolor = 200;
 
 
 var timerColor = [0,0,0];
@@ -35,13 +36,15 @@ var startGameSound = new Howl({src: '/sounds/interfaceSounds/start-game.mp3'});
 var wrongAnswerSound = new Howl({src: '/sounds/interfaceSounds/wrong-answer.mp3'});
 var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
 
+var loadedSounds = [];
+
 
 console.log("numPlauers init: : "+numPlayers);
 
 
 function setup() {
 
-    cnv = createCanvas(300,300);
+    cnv = createCanvas(380,380);
     cnv.parent('game');
  	background(canvasBGcolor);
 	noStroke();
@@ -54,9 +57,27 @@ function setup() {
   	});
 
 
-	initOscillator();
+	//initOscillator();
+
+  var ul = $('<ul></ul>');
+  sounds.forEach((sound,i)=> {
+    loadedSounds[i] = new Howl({src:sound.path});
+		console.log(sound.name);
+    console.log(i);
+    var button = $('<button></button>');
+    soundButtons.push(button);
+    var borderColor = sound.chosen ?  "10px solid #ffff00" : sound.bgColor;
+    button.css({ "background-color" : sound.bgColor});
+    button.css({ "color" : "#000" });
+    button.css({ "border" : borderColor});
+    button.click({param1:i},chooseSound);
+    ul.append(button.text(sound.name));
+	   })
+
+  $('#sounds').html(ul);
 
 
+currentSound = loadedSounds[0];
   // for(var i=0; i<numPlayers; i++) {
   //   // console.log("begin arcLegnth:"+arcLength);
   //   arcs[i] = new ArcButton(i,width/2,height/2, options.arcDiameter, radians(i*options.arcLength), radians(options.arcLength+(i*options.arcLength)), colors[i%4]);
@@ -75,26 +96,35 @@ function draw() {
 	if(typeof gameView != 'undefined') {
 		gameView.show();
 	}
-	
+
 	if(messages.length>0) {
-		
+
 		for(var i=0;i<messages.length;i++) {
 			messages[i].update();
 			messages[i].show();
 			if(messages[i].isDead) {
 				messages.splice(i,1);
 			}
-			
+
 		}
 
-		
-		
+
+
 	}
 
 
 }
 
-
+function chooseSound(e){
+  console.log("sound chosen : "+e.data.param1);
+  sounds.forEach(function(sound,i){
+    sound.chosen = false;
+    soundButtons[i].css({ "background-color" : sound.bgColor});
+  })
+  soundButtons[e.data.param1].css({ "background-color" : "#fff"});
+  currentSound = loadedSounds[e.data.param1];
+  console.log(sounds[e.data.param1].chosen);
+}
 
 
 
@@ -117,7 +147,7 @@ function mousePressed() {
 			// var clickedArc = gameView.arcs.filter((arc,i) => (pos > arc.start_arc && pos < arc.end_arc),this);
    //    console.log(clickedArc);
 //			var player = clickedArc[0].id;
-			trigPlayer(thisPlayer.playerNumber);
+			trigPlayer(thisPlayer.playerNumber, true);
 			socket.emit("checkMouseClick", thisPlayer.playerNumber);
 		}
 	}
@@ -127,7 +157,7 @@ function mousePressed() {
 function initReadyButton() {
 	readyButton = $('<button>join</button>');
 	readyButton.addClass('ready-button');
-	$('#game').append(readyButton);	 
+	$('#game').append(readyButton);
    $(readyButton).click(readyPlayer);
 
 }
@@ -141,20 +171,20 @@ function readyPlayer() {
 	hideReadyButton();
     thisPlayer.ready = true;
   	gamePaused = false;
-    
+
     if(thisPlayer.playerNumber === -1){
    	thisPlayer.playerNumber = readyPlayers;
    }
 
 
-	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor, currentScore); 
+	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor, currentScore);
 	gameView.init();
 	// scoreboard = new Scoreboard(currentScore);
 	// scoreboard.show();
     // localGame.memoryCounter = 0;
 
   console.log(thisPlayer);
-  
+
   socket.emit("playerReady", thisPlayer, function() {
     console.log("player emit");
   })
@@ -174,18 +204,18 @@ function hideReadyButton () {
 
 
 
-function initOscillator() {
-
-	  	//env = new p5.Env(t1, l1, t2, l2, t3, l3);
-	  	env = new p5.Env();
-			env.setADSR(0.01,0.1,0.5,0.01)
-			env.setRange(1.0,0);
-	   	osc = new p5.Oscillator();
-	  	osc.setType('sine');
-	  	osc.freq(240);
-	  	osc.amp(env);
-	  	osc.start();
-}
+// function initOscillator() {
+//
+// 	  	//env = new p5.Env(t1, l1, t2, l2, t3, l3);
+// 	  	env = new p5.Env();
+// 			env.setADSR(0.01,0.1,0.5,0.01)
+// 			env.setRange(1.0,0);
+// 	   	osc = new p5.Oscillator();
+// 	  	osc.setType('sine');
+// 	  	osc.freq(240);
+// 	  	osc.amp(env);
+// 	  	osc.start();
+// }
 
 
 
@@ -214,8 +244,12 @@ function initOscillator() {
 
 
 
-function trigPlayer(playerNum) {
+function trigPlayer(playerNum, moused) {
 	var currentNum = typeof playerNum != 'undefined' ? playerNum : localGame.sequence[localGame.memoryCounter];
+	if(typeof moused != 'undefined' && moused) {
+		gameView.playerButton.turnOn();
+		playSound(playerNum);
+	}
 	// var currentArc = sequence[memoryCounter];
 	// console.log(this);
 	// console.log(player);
@@ -223,25 +257,35 @@ function trigPlayer(playerNum) {
 	// console.log(currentArc);
 	// console.log(gameView.arcs[currentArc]);
 
-	
+
 
 	console.log("currentNum : "+ currentNum);
 	console.log("playerNum : "+ thisPlayer.playerNumber);
+	console.log(gameView.arcs);
 
 	if (typeof gameView != 'undefined') {
 
-		if(currentNum === thisPlayer.playerNumber) {
-			gameView.playerButton.turnOn();
-			playSound(currentNum);
 
+
+			gameView.arcs[currentNum].turnOn();
+
+		if(currentNum === thisPlayer.playerNumber) {
+			playSound(currentNum);
 		}
 
-		
+
+
+
+
 
 		localGame.memoryCounter++;
 		if(localGame.memoryCounter == localGame.sequence.length) {
 
 			clearInterval(thisRound);
+			setTimeout(function(){
+				gameView.sequencePlaying = false;
+				}
+				,250);
 			localGame.sequencePlaying = false;
 			gamePaused = false;
 			localGame.memoryCounter=0;
@@ -267,9 +311,16 @@ function trigPlayer(playerNum) {
 
 
 function playSound(index) {
-	console.log(gameView.freqs[index]);
-	osc.freq(gameView.freqs[index]);
-	env.play(osc);
+
+  // console.log(gameView.freqs[index]);
+	// osc.freq(gameView.freqs[index]);
+	// env.play(osc);
+  //
+
+  currentSound.play();
+  console.log("playing");
+
+
 }
 
 
@@ -316,7 +367,7 @@ socket.on('connect', function () {
 	var params = $.deparam(window.location.search);
 	// params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
   // params['ready'] = false;
-	
+
   thisPlayer = new Player(socket.id,params.name);
 
 
@@ -346,9 +397,13 @@ socket.on('adminSetup', function(){
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
 
-   localPlayers=players;
-   readyPlayers = players.filter((player)=> player.ready === true).length; 
+   	localPlayers=players;
+   	readyPlayers = players.filter((player)=> player.ready === true).length;
 	numPlayers = readyPlayers;
+
+	if (typeof gameView != 'undefined') {
+	gameView.updatePlayers(numPlayers);
+		}
 
 	players.forEach((player)=> {
 		console.log(player.playerColor);
@@ -380,7 +435,7 @@ socket.on('adminSetup', function(){
 
 
 socket.on('startClientGame', function(game){
-	 
+
     startGameSound.play();
     // scoreboard.innerHTML = "round " + game.currentRound;
     localGame = game;
@@ -390,6 +445,7 @@ socket.on('startClientGame', function(game){
 
 socket.on('trigClientRound', function(game){
 	gamePaused = true;
+	gameView.sequencePlaying = true;
 	console.log(game.sequence);
 	localGame.sequence = game.sequence;
 	console.log(localGame.sequence);
@@ -412,9 +468,9 @@ socket.on("wonRound", function(){
 
 jQuery('#message-form').on('submit', function (e) {
 	e.preventDefault();
-  
+
 	var messageTextbox = jQuery('[name=message]');
-  
+
 	socket.emit('createMessage', {
 	  text: messageTextbox.val()
 	}, function () {
@@ -426,11 +482,11 @@ jQuery('#message-form').on('submit', function (e) {
 
 
   socket.on('newMessage', function (message) {
-	
+
 	var newMessage = new Message(message.color,message.text);
 	messages.push(newMessage);
-	
-	
+
+
 	// var formattedTime = moment(message.createdAt).format('h:mm a');
 	// var template = jQuery('#message-template').html();
 	// var html = Mustache.render(template, {
