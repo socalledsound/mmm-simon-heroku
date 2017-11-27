@@ -267,8 +267,8 @@ function trigPlayer(playerNum) {
 
 
 function playSound(index) {
-	osc.freq(gameView.freqs[index]
-		);
+	console.log(gameView.freqs[index]);
+	osc.freq(gameView.freqs[index]);
 	env.play(osc);
 }
 

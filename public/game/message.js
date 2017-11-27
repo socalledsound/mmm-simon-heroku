@@ -4,7 +4,7 @@ var Message = function(color, message) {
     this.text = message;
     this.x=width;
     this.y = random(50,height-50);
-    this.speed = random(5);
+    this.speed = random(2);
     this.isDead = false;
     this.fontSize = random(15,90);
 
@@ -21,7 +21,7 @@ var Message = function(color, message) {
     this.update = function(){
         
         this.x=this.x-this.speed;
-        if(this.x<0) {
+        if(this.x < -1000) {
             this.isDead = true;
         }
     

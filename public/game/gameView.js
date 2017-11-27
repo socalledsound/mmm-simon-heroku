@@ -21,7 +21,7 @@ var GameView = function(numPlayers,playerNumber, playerColor, score) {
     // this.playerResponses = [];
     // this.currentRound = 0;
     // this.allNums = Array.apply(null, Array(this.numPlayers));
-     this.freqs = Array.apply(null, Array(this.numPlayers));
+     this.freqs = Array.apply(null, Array(20));
     // this.sequencePlaying = false;
     // this.checkAnswerCounter = 0;
     // this.gamePaused = true;
@@ -44,7 +44,7 @@ var GameView = function(numPlayers,playerNumber, playerColor, score) {
 
 
    this.freqs.map((freq,i) => {
-     	this.freqs[i] = 220+(i*200);
+     	this.freqs[i] = 360+(i*40);
      	});
 
 

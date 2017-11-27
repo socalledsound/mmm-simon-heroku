@@ -139,12 +139,14 @@ io.on('connection', (socket) => {
         if (game.numRightAnswers === game.sequence.length) {
           game.currentRound =game.currentRound +1;
           setTimeout(nextRound,500);  
+          game.resetAnswers();
           io.emit("wonRound");
            
         }
 
       }
       else {
+        game.resetAnswers();
         io.emit("wrongAnswer");
       }
 
