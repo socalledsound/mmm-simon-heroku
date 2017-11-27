@@ -41,7 +41,7 @@ console.log("numPlauers init: : "+numPlayers);
 
 function setup() {
 
-    cnv = createCanvas(480,400);
+    cnv = createCanvas(300,300);
     cnv.parent('game');
  	background(canvasBGcolor);
 	noStroke();
