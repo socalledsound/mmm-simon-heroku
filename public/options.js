@@ -1,6 +1,6 @@
 var options = {
   diameter : 1800,
-  tempo : 300
+  tempo : 600
 
 
 }

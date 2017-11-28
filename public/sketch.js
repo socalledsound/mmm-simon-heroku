@@ -66,7 +66,7 @@ function setup() {
     console.log(i);
     var button = $('<button></button>');
     soundButtons.push(button);
-    var borderColor = sound.chosen ?  "10px solid #ffff00" : sound.bgColor;
+    var borderColor = sound.chosen ?  "10px solid #77ffff" : sound.bgColor;
     button.css({ "background-color" : sound.bgColor});
     button.css({ "color" : "#000" });
     button.css({ "border" : borderColor});
@@ -256,27 +256,17 @@ function trigPlayer(playerNum, moused) {
 	// console.log(localGame.sequence[localGame.memoryCounter])
 	// console.log(currentArc);
 	// console.log(gameView.arcs[currentArc]);
-
-
-
-	console.log("currentNum : "+ currentNum);
-	console.log("playerNum : "+ thisPlayer.playerNumber);
-	console.log(gameView.arcs);
+	// console.log("currentNum : "+ currentNum);
+	// console.log("playerNum : "+ thisPlayer.playerNumber);
+	// console.log(gameView.arcs);
 
 	if (typeof gameView != 'undefined') {
-
-
 
 			gameView.arcs[currentNum].turnOn();
 
 		if(currentNum === thisPlayer.playerNumber) {
 			playSound(currentNum);
 		}
-
-
-
-
-
 
 		localGame.memoryCounter++;
 		if(localGame.memoryCounter == localGame.sequence.length) {
@@ -285,15 +275,13 @@ function trigPlayer(playerNum, moused) {
 			setTimeout(function(){
 				gameView.sequencePlaying = false;
 				}
-				,250);
+				,600);
 			localGame.sequencePlaying = false;
 			gamePaused = false;
 			localGame.memoryCounter=0;
 			// setTimeout(nextRound, tempo);
-
 			//setTimeout(awaitResponse, tempo);
 		}
-
 
 	}
 	else {
@@ -408,10 +396,10 @@ socket.on('adminSetup', function(){
 	players.forEach((player)=> {
 		console.log(player.playerColor);
     var li = $('<li></li>');
-    var borderColor = player.ready ?  "10px solid #ffff00" : player.playerColor;
+    var borderColor = player.ready ?  "10px solid #77ffff" : player.playerColor;
     li.css({ "background-color" : player.playerColor});
      li.css({ "background" : player.playerColor});
-    li.css({ "color" : "#000" });
+    li.css({ "color" : "#fff" });
      li.css({ "border" : borderColor});
     ul.append(li.text(player.name));
 	   })

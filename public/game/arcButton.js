@@ -34,13 +34,13 @@ var ArcButton = function (id,x,y,diameter,start_arc,end_arc, color) {
 
 		this.fillColor = this.onColor;
 		this.isOn = true;
- 	  	setTimeout(this.turnOff,250);
+ 	  	setTimeout(this.turnOff,300);
 
 	},
 
 	this.turnOff = function(){
-		this.fillColor = this.offColor;	
-		this.isOn = false;		 
+		this.fillColor = this.offColor;
+		this.isOn = false;
 	}
 
 

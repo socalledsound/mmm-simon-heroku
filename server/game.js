@@ -4,7 +4,7 @@ class Game {
       this.numPlayers = numPlayers;
       this.radLimit =40;
       this.diameter = 1800;
-      this.tempo = 300;
+      this.tempo = 600;
       this.memoryCounter = 0;
       this.arcs =[];
       this.sequence = [];
@@ -25,7 +25,7 @@ class Game {
       // this.startGameSound = new Howl({src: 'start-game.mp3'});
       // this.wrongAnswerSound = new Howl({src: 'wrong-answer.mp3'});
       // this.loseGameSound = new Howl({src: 'lose-game.mp3'});
-    
+
     this.addStep = this.addStep.bind(this);
     this.setChooseFrom = this.setChooseFrom.bind(this);
     this.nextRound = this.nextRound.bind(this);
@@ -134,11 +134,11 @@ class Game {
     for(var i=0;i<sequenceLength;i++) {
       this.sequence[i] = i%this.numPlayers;
     }
-    
+
 
       this.sequence = this.shuffle(this.sequence);
 
-      
+
 
     console.log("sequence: " + this.sequence);
     return this.sequence
@@ -152,20 +152,20 @@ class Game {
 
   shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-  
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-  
+
       // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-  
+
       // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-  
+
     return array;
   }
 
@@ -183,8 +183,8 @@ class Game {
       this.sequence[index] = Math.round((Math.random() * (this.numPlayers)));
       // this.sequence[index] = Math.round(Math.random());
     })
-    
-    
+
+
     console.log("sequence: " + this.sequence);
 
     return this.sequence

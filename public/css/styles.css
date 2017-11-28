@@ -25,6 +25,7 @@ border-radius: 5%;
 
 .ready-button:hover {
   background-color: rgb(40,40,40);
+  background-color: #ff7777;
 }
 
 
@@ -181,9 +182,18 @@ button:disabled{
     width:160px;
     height:100vh;
     color:#000;
+    color:#fff;
     background-color:#837575;
     background-color: #42d9f4;
     background-color: #a0d3f7;
+    background-color: #efb483;
+    background-color: #f2913c;
+    background-color: #aeffa5;
+    background-color: #ff60f9;
+    background-color: #ff3f35;
+    background-color: #ffda77;
+    background-color: #ff7ad5;
+    background-color: #ef2bb1;
 
     /* background:-moz-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
     background:-webkit-gradient(linear,left top,right bottom,color-stop(0,rgba(49,84,129,1)),color-stop(100%,rgba(39,107,130,1)));
@@ -222,9 +232,11 @@ button:disabled{
     /* overflow-y:scroll; */
     width:160px;
     height:100vh;
-    color:#000;
+    color:#fff;
     background-color:#837575;
     background-color: #42d9f4;
+    background-color: #ff7ad5;
+    background-color: #ef2bb1;
 
     /* background:-moz-linear-gradient(125deg,rgba(39,107,130,1) 0,rgba(49,84,129,1) 100%);
     background:-webkit-gradient(linear,left top,right bottom,color-stop(0,rgba(49,84,129,1)),color-stop(100%,rgba(39,107,130,1)));
