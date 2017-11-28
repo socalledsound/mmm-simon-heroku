@@ -108,8 +108,16 @@ io.on('connection', (socket) => {
 
 //   });
 
+  socket.on('mouseData', (mouseFollowerData)=>{
+    io.emit('sendBackMouseData', mouseFollowerData);
+  } )
+
+
+
+
+
   socket.on('playerReady',(player, callback)=> {
-    var currentPlayer = players.getPlayer(player.id); 
+    var currentPlayer = players.getPlayer(player.id);
     currentPlayer.ready = true;
     io.emit('updatePlayerList', players.getPlayerList());
 
@@ -138,10 +146,10 @@ io.on('connection', (socket) => {
         console.log(game.sequence.length+" long");
         if (game.numRightAnswers === game.sequence.length) {
           game.currentRound =game.currentRound +1;
-          setTimeout(nextRound,500);  
+          setTimeout(nextRound,500);
           game.resetAnswers();
           io.emit("wonRound");
-           
+
         }
 
       }
@@ -162,15 +170,15 @@ io.on('connection', (socket) => {
    socket.on('playPattern', (numPlayers)=>{
     game.numPlayers = numPlayers
     setTimeout(nextPattern,500);
-  }) 
+  })
 
   socket.on('repeatPattern', ()=>{
     console.log("repeat");
     game.resetAnswers();
-    
+
 
     io.emit('trigClientRound', game);
-  }) 
+  })
 
   // socket.on('updateGame')
 
@@ -186,7 +194,7 @@ io.on('connection', (socket) => {
 
 
   function nextRound(){
-   
+
     console.log(game.sequence);
     game.nextRound();
     // game.sequence = [0,1,1,0,1,1,1,0,0];
@@ -201,7 +209,7 @@ io.on('connection', (socket) => {
     console.log(player.name+" left the game");
 
     if(player.admin){
-      noAdminYet = true; 
+      noAdminYet = true;
       }
 
     if(player) {

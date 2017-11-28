@@ -2,6 +2,7 @@
 var numPlayers = 0;
 var thisPlayer;
 var localPlayers = [];
+var mouseFollowers = [];
 var messages = [];
 var arcs = [];
 var colors = [];
@@ -90,27 +91,48 @@ currentSound = loadedSounds[0];
 
 
 function draw() {
-
 	background(canvasBGcolor);
-
 	if(typeof gameView != 'undefined') {
 		gameView.show();
 	}
-
 	if(messages.length>0) {
-
 		for(var i=0;i<messages.length;i++) {
 			messages[i].update();
 			messages[i].show();
 			if(messages[i].isDead) {
 				messages.splice(i,1);
 			}
-
 		}
-
-
-
 	}
+
+  //this is where we draw the mouse stuff
+  if(typeof thisPlayer != 'undefined') {
+    mouseFollowers.push(new MouseFollower(mouseX,mouseY,thisPlayer.playerColor));
+
+    mouseFollowers.forEach(function(mousefollower, index){
+
+      // mousefollower.update();
+      mousefollower.initValue = mousefollower.initValue+1;
+      if(mousefollower.initValue > mousefollower.deathDelay) {
+        mousefollower.dead = true;
+      }
+
+
+
+      if(mousefollower.dead) {
+        mouseFollowers.splice(index,1);
+      }
+
+      fill(mousefollower.fillColor);
+      ellipse(mousefollower.x,mousefollower.y,40);
+
+      // mousefollower.show();
+
+
+    });
+    // console.log(mouseFollowers);
+    socket.emit('mouseData',mouseFollowers);
+  }
 
 
 }
@@ -384,10 +406,9 @@ socket.on('adminSetup', function(){
 
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
-
    	localPlayers=players;
    	readyPlayers = players.filter((player)=> player.ready === true).length;
-	numPlayers = readyPlayers;
+	   numPlayers = readyPlayers;
 
 	if (typeof gameView != 'undefined') {
 	gameView.updatePlayers(numPlayers);
@@ -474,15 +495,9 @@ jQuery('#message-form').on('submit', function (e) {
 	var newMessage = new Message(message.color,message.text);
 	messages.push(newMessage);
 
-
-	// var formattedTime = moment(message.createdAt).format('h:mm a');
-	// var template = jQuery('#message-template').html();
-	// var html = Mustache.render(template, {
-	//   text: message.text,
-	//   from: message.from,
-	//   createdAt: formattedTime
-	// });
-
-	// jQuery('#messages').append(html);
-	// scrollToBottom();
   });
+
+  socket.on('sendBackMouseData', function(mouseData){
+    // console.log(mouseData);
+     mouseFollowers = mouseData;
+  })
