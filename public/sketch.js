@@ -120,7 +120,7 @@ function draw() {
         mousefollower.dead = true;
       }
       if(mousefollower.dead) {
-        mouseFollowers.splice(index,1);
+        thisMouseFollowers.splice(index,1);
       }
 
       fill(mousefollower.fillColor);
@@ -147,7 +147,7 @@ function draw() {
 						mousefollower.dead = true;
 					}
 					if(mousefollower.dead) {
-						mouseFollowers.splice(index,1);
+						allMouseFollowers.splice(index,1);
 					}
 		
 					fill(mousefollower.fillColor);
