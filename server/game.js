@@ -4,7 +4,7 @@ class Game {
       this.numPlayers = numPlayers;
       this.radLimit =40;
       this.diameter = 1800;
-      this.tempo = 600;
+      this.tempo = 1000;
       this.memoryCounter = 0;
       this.arcs =[];
       this.sequence = [];

@@ -69,24 +69,30 @@ this.init = function() {
 }
 
 
-this.addArc = function(id) {
-  console.log("id: " + id);
-  console.log("arcLength: " + this.arcLength);
-  console.log("arclength*id: " + this.arcLength*id);
-    this.arcs[id] = new ArcButton(id,width/2,height/2, this.diameter, radians(id*this.arcLength), radians(this.arcLength+(id*this.arcLength)), localPlayers[id].playerColor);
-}
+// this.addArc = function(id) {
+//     this.arcLength = 360/numPlayers;
+//     console.log("id: " + id);
+//   console.log("arcLength: " + this.arcLength);
+//   console.log("arclength*id: " + this.arcLength*id);
 
-//
-// this.updatePlayers = function(numPlayers) {
-//     this.numPlayers = numPlayers;
-//     this.arcLength = 360/this.numPlayers;
-//     for(var i=0; i<this.numPlayers; i++) {
-//         // console.log("begin arcLegnth:"+arcLength);
-//
-// 		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
-// 		this.arcs[i].turnOff();
-// 	};
+//     this.arcs[id] = new ArcButton(id,width/2,height/2, this.diameter, radians(id*this.arcLength), radians(this.arcLength+(id*this.arcLength)), localPlayers[id].playerColor);
 // }
+
+
+
+this.updatePlayers = function(localPlayers, numPlayers) {
+    this.numPlayers = numPlayers;
+    this.arcLength = 360/this.numPlayers;
+    console.log(localPlayers);
+    for(var i=0; i<this.numPlayers; i++) {
+        console.log(localPlayers[i]);
+        console.log("i:"+i);
+        console.log("name: "+ localPlayers[i].name);
+        console.log("player number: "+ gameView.playerNumber);
+		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
+		this.arcs[i].turnOff();
+	};
+}
 
 
 this.show = function () {

@@ -14,6 +14,8 @@ var adminButtonsShown = false;
 var osc, env;
 
 // var scoreboard = document.getElementById('scoreboard');
+var nameDiv = document.getElementById('name');
+var nameDiv = $('#name');
 var scoreboard;
 var currentScore = 0;
 var startButton, jamButton, adminButtons;
@@ -27,6 +29,7 @@ var timerColor = [0,0,0];
 var gamePaused = true;
 
 var readyPlayers=0;
+var thisLocalPlayer;
 
 
 var socket = io();
@@ -37,8 +40,10 @@ var newMessage = messages.children('li:last-child');
 var startGameSound = new Howl({src: '/sounds/interfaceSounds/start-game.mp3'});
 var wrongAnswerSound = new Howl({src: '/sounds/interfaceSounds/wrong-answer.mp3'});
 var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
+var wonRoundSound = new Howl({src: '/sounds/interfaceSounds/boxing-bell.mp3'});
 
 var loadedSounds = [];
+var soundIndex=0;
 
 
 console.log("numPlauers init: : "+numPlayers);
@@ -80,6 +85,7 @@ function setup() {
 
 
 currentSound = loadedSounds[0];
+ console.log(sounds[soundIndex].name);
   // for(var i=0; i<numPlayers; i++) {
   //   // console.log("begin arcLegnth:"+arcLength);
   //   arcs[i] = new ArcButton(i,width/2,height/2, options.arcDiameter, radians(i*options.arcLength), radians(options.arcLength+(i*options.arcLength)), colors[i%4]);
@@ -160,13 +166,15 @@ function draw() {
 }
 
 function chooseSound(e){
-  console.log("sound chosen : "+e.data.param1);
+	console.log("sound chosen : "+e.data.param1);
+	soundIndex = e.data.param1;
   sounds.forEach(function(sound,i){
     sound.chosen = false;
     soundButtons[i].css({ "background-color" : sound.bgColor});
   })
   soundButtons[e.data.param1].css({ "background-color" : "#fff"});
-  currentSound = loadedSounds[e.data.param1];
+	currentSound = loadedSounds[e.data.param1];
+	nameDiv.text(thisPlayer.name + "  :  " + sounds[soundIndex].name);
   console.log(sounds[e.data.param1].chosen);
 }
 
@@ -211,14 +219,18 @@ function initReadyButton() {
 
 
 function readyPlayer() {
+
 	background(canvasBGcolor);
 	hideReadyButton();
-    thisPlayer.ready = true;
-  	gamePaused = false;
+	
+	
+	 thisPlayer.ready = true;
+		gamePaused = false;
+	//	nameDiv.innerHTML = thisPlayer.name + "  :  " + currentSound.name;
+		nameDiv.text(thisPlayer.name + "  :  " + sounds[soundIndex].name);
+		nameDiv.css({"background-color" : thisPlayer.playerColor})
 
-    if(thisPlayer.playerNumber === -1){
-   	thisPlayer.playerNumber = readyPlayers;
-   }
+
 
 
 	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor, currentScore);
@@ -428,22 +440,10 @@ socket.on('adminSetup', function(){
 
   socket.on('updatePlayerList', function(players){
 	var ul = $('<ul></ul>');
-   	localPlayers=players;
-   	readyPlayers = players.filter((player)=> player.ready === true).length;
-	   numPlayers = readyPlayers;
-
-	if (typeof gameView != 'undefined') {
-	players.forEach((player,index)=> {
-    console.log(index);
-      gameView.addArc(index);
-      console.log(gameView.arcs);
-    });
-
-		}
-
+	numPlayers = players.filter((player)=> player.ready === true).length;
 	players.forEach((player,index)=> {
 		console.log(player.playerColor);
-
+		
     var li = $('<li></li>');
     var borderColor = player.ready ?  "10px solid #77ffff" : player.playerColor;
     li.css({ "background-color" : player.playerColor});
@@ -454,9 +454,42 @@ socket.on('adminSetup', function(){
 	   })
 
 	   $('#players').html(ul);
-  })
 
+	
+	
+	readyPlayers = players.filter((player) => player.ready === true);
+	readyPlayers.forEach((player, index)=>{
+		player.playerNumber = index;
+		if(player.name === thisPlayer.name) {
+			thisPlayer.playerNumber = player.playerNumber;
+		}
+	});
+	localPlayers=readyPlayers;
+	
+// localPlayers.forEach((player)=>{
+// 	console.log(player.playerNumber);
+// })
+// if(localPlayers.length > 0) {
 
+// 	console.log(localPlayers[0].name);
+// 	console.log(thisPlayer.name);
+// 	thisLocalPlayer = localPlayers.filter((localPlayer) =>   localPlayer.name == thisPlayer.name );
+// 		console.log("thislocalplayer: " + thisLocalPlayer.name);
+// 		if(thisPlayer.playerNumber === -1){
+	
+// 		 thisPlayer.playerNumber = thisLocalPlayer.playerNumber;
+	
+// 	 }
+// }
+
+	
+	if (typeof gameView != 'undefined') {
+		gameView.playerNumber = thisPlayer.playerNumber;	
+				gameView.updatePlayers(localPlayers,numPlayers);
+		
+				}
+
+	})				
   // socket.on('updatePlayerReadyList', function(players){
   //   var ul = $('<ul></ul>');
   //   console.log(players);
@@ -495,11 +528,11 @@ socket.on('trigClientRound', function(game){
 
 
 socket.on("wrongAnswer", function(){
-	loseGameSound.play();
+	wrongAnswerSound.play();
 })
 
 socket.on("wonRound", function(){
-	// wonRoundSound.play();
+	 wonRoundSound.play();
 	updateScoreboard();
 })
 
