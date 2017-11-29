@@ -7,18 +7,17 @@ var MouseFollower = function(x,y,color) {
   this.initValue = 0;
   this.deathDelay = 30;
 
+  // this.update = function() {
+  //   this.initValue = this.initValue+1;
+  //   if(this.initValue > this.deathDelay) {
+  //     this.dead = true;
+  //   }
+  // }
 
-  this.update = function() {
-    this.initValue = this.initValue+1;
-    if(this.initValue > this.deathDelay) {
-      this.dead = true;
-    }
-  }
 
-
-  this.show = function() {
-      fill(this.fillColor);
-      ellipse(this.x,this.y,40);
-  }
+  // this.show = function() {
+  //     fill(this.fillColor);
+  //     ellipse(this.x,this.y,40);
+  // }
 
 }

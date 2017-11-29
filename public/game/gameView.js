@@ -3,15 +3,15 @@ var GameView = function(numPlayers,playerNumber, playerColor, score) {
     this.playerNumber = playerNumber;
     this.playerColor = playerColor;
     this.radLimit =40;
-	this.diameter = 800;
-	this.arcLength = 360/this.numPlayers;
-	this.arcs=[];
+	  this.diameter = 800;
+	  this.arcLength = 360/this.numPlayers;
+	  this.arcs=[];
     this.playerButton;
     this.sequencePlaying = false;
     this.scoreboard;
     this.currentScore = score;
 
-	
+
 
     // this.tempo = 300;
     // this.memoryCounter = 0;
@@ -61,38 +61,45 @@ this.init = function() {
 
     this.playerButton = new PlayerButton(this.playerNumber, this.playerColor);
     this.scoreboard = new Scoreboard(this.currentScore);
-   
-	 	for(var i=0; i<this.numPlayers; i++) {
-		// console.log("begin arcLegnth:"+arcLength);
-		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
-		this.arcs[i].turnOff();
-	};
+	//  	for(var i=0; i<this.numPlayers; i++) {
+	// 	// console.log("begin arcLegnth:"+arcLength);
+	// 	this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
+	// 	this.arcs[i].turnOff();
+	// };
 }
 
 
-this.updatePlayers = function(numPlayers) {
-    this.numPlayers = numPlayers;
-    this.arcLength = 360/this.numPlayers;
-    for(var i=0; i<this.numPlayers; i++) {
-        // console.log("begin arcLegnth:"+arcLength);
-        
-		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
-		this.arcs[i].turnOff();
-	};
+this.addArc = function(id) {
+  console.log("id: " + id);
+  console.log("arcLength: " + this.arcLength);
+  console.log("arclength*id: " + this.arcLength*id);
+    this.arcs[id] = new ArcButton(id,width/2,height/2, this.diameter, radians(id*this.arcLength), radians(this.arcLength+(id*this.arcLength)), localPlayers[id].playerColor);
 }
+
+//
+// this.updatePlayers = function(numPlayers) {
+//     this.numPlayers = numPlayers;
+//     this.arcLength = 360/this.numPlayers;
+//     for(var i=0; i<this.numPlayers; i++) {
+//         // console.log("begin arcLegnth:"+arcLength);
+//
+// 		this.arcs[i] = new ArcButton(i,width/2,height/2, this.diameter, radians(i*this.arcLength), radians(this.arcLength+(i*this.arcLength)), localPlayers[i].playerColor);
+// 		this.arcs[i].turnOff();
+// 	};
+// }
 
 
 this.show = function () {
-    
+
       this.playerButton.show();
-    
+
     if(this.sequencePlaying) {
         for(var i=0; i<this.numPlayers; i++) {
             this.arcs[i].show();
             // console.log(this.arcs[i].isOn);
         }
     }
-    
+
     this.scoreboard.update();
 }
 

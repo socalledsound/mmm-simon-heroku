@@ -2,7 +2,8 @@
 var numPlayers = 0;
 var thisPlayer;
 var localPlayers = [];
-var mouseFollowers = [];
+var thisMouseFollowers = [];
+var allMouseFollowers=[];
 var messages = [];
 var arcs = [];
 var colors = [];
@@ -92,9 +93,11 @@ currentSound = loadedSounds[0];
 
 function draw() {
 	background(canvasBGcolor);
+
 	if(typeof gameView != 'undefined') {
 		gameView.show();
 	}
+
 	if(messages.length>0) {
 		for(var i=0;i<messages.length;i++) {
 			messages[i].update();
@@ -107,18 +110,15 @@ function draw() {
 
   //this is where we draw the mouse stuff
   if(typeof thisPlayer != 'undefined') {
-    mouseFollowers.push(new MouseFollower(mouseX,mouseY,thisPlayer.playerColor));
+    thisMouseFollowers.push(new MouseFollower(mouseX,mouseY,thisPlayer.playerColor));
 
-    mouseFollowers.forEach(function(mousefollower, index){
+    thisMouseFollowers.forEach(function(mousefollower, index){
 
       // mousefollower.update();
       mousefollower.initValue = mousefollower.initValue+1;
       if(mousefollower.initValue > mousefollower.deathDelay) {
         mousefollower.dead = true;
       }
-
-
-
       if(mousefollower.dead) {
         mouseFollowers.splice(index,1);
       }
@@ -129,12 +129,34 @@ function draw() {
       // mousefollower.show();
 
 
-    });
+		});
+		
+
+
+
     // console.log(mouseFollowers);
-    socket.emit('mouseData',mouseFollowers);
+    socket.emit('mouseData',thisMouseFollowers);
   }
 
 
+	allMouseFollowers.forEach(function(mousefollower, index){
+		
+					// mousefollower.update();
+					mousefollower.initValue = mousefollower.initValue+1;
+					if(mousefollower.initValue > mousefollower.deathDelay) {
+						mousefollower.dead = true;
+					}
+					if(mousefollower.dead) {
+						mouseFollowers.splice(index,1);
+					}
+		
+					fill(mousefollower.fillColor);
+					ellipse(mousefollower.x,mousefollower.y,40);
+		
+					// mousefollower.show();
+		
+		
+				});
 }
 
 function chooseSound(e){
@@ -278,8 +300,8 @@ function trigPlayer(playerNum, moused) {
 	// console.log(localGame.sequence[localGame.memoryCounter])
 	// console.log(currentArc);
 	// console.log(gameView.arcs[currentArc]);
-	// console.log("currentNum : "+ currentNum);
-	// console.log("playerNum : "+ thisPlayer.playerNumber);
+	console.log("currentNum : "+ currentNum);
+	console.log("playerNum : "+ thisPlayer.playerNumber);
 	// console.log(gameView.arcs);
 
 	if (typeof gameView != 'undefined') {
@@ -411,11 +433,17 @@ socket.on('adminSetup', function(){
 	   numPlayers = readyPlayers;
 
 	if (typeof gameView != 'undefined') {
-	gameView.updatePlayers(numPlayers);
+	players.forEach((player,index)=> {
+    console.log(index);
+      gameView.addArc(index);
+      console.log(gameView.arcs);
+    });
+
 		}
 
-	players.forEach((player)=> {
+	players.forEach((player,index)=> {
 		console.log(player.playerColor);
+
     var li = $('<li></li>');
     var borderColor = player.ready ?  "10px solid #77ffff" : player.playerColor;
     li.css({ "background-color" : player.playerColor});
@@ -499,5 +527,5 @@ jQuery('#message-form').on('submit', function (e) {
 
   socket.on('sendBackMouseData', function(mouseData){
     // console.log(mouseData);
-     mouseFollowers = mouseData;
+     allMouseFollowers = mouseData;
   })
