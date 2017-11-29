@@ -286,13 +286,15 @@ button:disabled{
 
 
 .banner {
-    background-color: #fff;
+    background-color: #666;
+   
     height:70px;
     width:100%;
 }
 
 .banner h1 {
-    padding: 30px 30px 30px 30px;
+    font-size:40px;
+    padding: 20px 20px 20px 20px;
 }
 /*
 .chat__footer,.chat__sidebar li{background:#e6eaee;padding:10px}.chat__sidebar h3{color:#e6eaee;margin:10px 20px;text-align:left}
