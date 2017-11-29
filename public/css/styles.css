@@ -53,6 +53,7 @@ button,button:hover{
 
 body {
     background-color: #666;
+    background-color: #ef2bb1;
 }
 
 canvas {
@@ -179,7 +180,7 @@ button:disabled{
 
 .list-players {
     /* overflow-y:scroll; */
-    width:160px;
+    width:100px;
     height:100vh;
     color:#000;
     color:#fff;
@@ -230,7 +231,7 @@ button:disabled{
 
 .list-sounds {
     /* overflow-y:scroll; */
-    width:160px;
+    width:300px;
     height:100vh;
     color:#fff;
     background-color:#837575;
@@ -268,8 +269,31 @@ button:disabled{
     font-size: 22px;
 }
 
+.name-wrapper {
+    color: #000;
+    padding-left:5px;
+    padding-right:5px;
+    margin-top:30px;
+}
+
+#name {
+    color: #000;
+    font-size: 30px;
+    padding-left:30px;
+    padding-top:10px;
+    padding-bottom: 10px;
+}
 
 
+.banner {
+    background-color: #fff;
+    height:70px;
+    width:100%;
+}
+
+.banner h1 {
+    padding: 30px 30px 30px 30px;
+}
 /*
 .chat__footer,.chat__sidebar li{background:#e6eaee;padding:10px}.chat__sidebar h3{color:#e6eaee;margin:10px 20px;text-align:left}
 .chat__sidebar li{border:1px solid #e1e1e1;border-radius:5px;margin:10px}
