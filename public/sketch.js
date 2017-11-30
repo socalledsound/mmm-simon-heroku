@@ -237,7 +237,7 @@ function readyPlayer() {
 	//	nameDiv.innerHTML = thisPlayer.name + "  :  " + currentSound.name;
 		nameDiv.text(thisPlayer.name + "  :  " + sounds[soundIndex].name);
 		nameDiv.css({"background-color" : thisPlayer.playerColor})
-
+    $('#message-wrapper').css({"background-color" : thisPlayer.playerColor})
 
 
 
