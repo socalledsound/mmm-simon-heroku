@@ -205,7 +205,10 @@ function mousePressed() {
    //    console.log(clickedArc);
 //			var player = clickedArc[0].id;
 			trigPlayer(thisPlayer.playerNumber, true);
-			socket.emit("checkMouseClick", thisPlayer.playerNumber);
+      if (thisPlayer.inGame) {
+        socket.emit("checkMouseClick", thisPlayer.playerNumber);
+      }
+
 		}
 	}
 
@@ -386,6 +389,7 @@ function startGame() {
 
 function repeatPattern(){
 	console.log('repeat pattern sketch');
+  clearInterval(thisRound);
 	socket.emit('repeatPattern');
 }
 
@@ -497,7 +501,10 @@ socket.on('adminSetup', function(){
   // })
 
 socket.on("resetGame", function(){
-  clearInterval(thisRound);
+  if(typeof thisRound != 'undefined') {
+    clearInterval(thisRound);
+  }
+
 })
 
 
@@ -511,9 +518,29 @@ socket.on('startClientGame', function(game){
 });
 
 socket.on('trigClientRound', function(game){
+  if(typeof thisRound != 'undefined') {
+    clearInterval(thisRound);
+  }
+
 	gamePaused = true;
 	gameView.sequencePlaying = true;
 	localGame.sequence = game.sequence;
+
+//if this player number is in localGame.sequence then
+  // var inSequence = (index === localGame.memoryCounter) ?  "10px solid #ffff00" : cheatPlayer.playerColor;
+  // var inSequence = (localGame.sequence.filter       ? true : false;
+
+  var inSequence = localGame.sequence.filter(function(number){
+      number ===  thisPlayer.playerNumber;
+  })
+
+console.log("in sequence ::: :: " + inSequence);
+
+        if(inSequence != 'undefined') {
+          thisPlayer.inGame = true;
+}
+
+
   updateCheat();
 	// console.log(game.sequence);
 	// console.log(localSequence);
