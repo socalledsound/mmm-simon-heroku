@@ -126,6 +126,7 @@ io.on('connection', (socket) => {
 
 
   socket.on('startGame', ()=>{
+    io.emit("resetGame");
     var numPlayers = players.players.filter((player)=> player.ready === true).length;
     game = new Game(numPlayers);
     game.init();

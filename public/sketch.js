@@ -43,6 +43,10 @@ var wrongAnswerSound = new Howl({src: '/sounds/interfaceSounds/wrong-answer.mp3'
 var loseGameSound = new Howl({src: '/sounds/interfaceSounds/lose-game.mp3'});
 var wonRoundSound = new Howl({src: '/sounds/interfaceSounds/boxing-bell.mp3'});
 
+
+
+
+
 var loadedSounds = [];
 var soundIndex=0;
 
@@ -294,17 +298,8 @@ function trigPlayer(playerNum, moused) {
 		playSound(playerNum);
     return
 	}
-	// var currentArc = sequence[memoryCounter];
-	// console.log(this);
-	// console.log(player);
-	// console.log(localGame.sequence[localGame.memoryCounter])
-	// console.log(currentArc);
-	// console.log(gameView.arcs[currentArc]);
-	console.log("currentNum : "+ currentNum);
-	console.log("playerNum : "+ thisPlayer.playerNumber);
-	// console.log(gameView.arcs);
 
-	if (typeof gameView != 'undefined') {
+  if (typeof gameView != 'undefined') {
 
 			gameView.arcs[currentNum].turnOn();
 
@@ -343,6 +338,7 @@ function trigPlayer(playerNum, moused) {
 
 function finishedSequence() {
   socket.emit("resetGlobalMemoryCounter");
+  clearInterval(thisRound);
   updateCheat();
 }
 
@@ -499,6 +495,10 @@ socket.on('adminSetup', function(){
   //   })
   //   $('#players').html(ul);
   // })
+
+socket.on("resetGame", function(){
+  clearInterval(thisRound);
+})
 
 
 socket.on('startClientGame', function(game){
