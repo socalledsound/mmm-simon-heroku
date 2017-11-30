@@ -140,6 +140,8 @@ io.on('connection', (socket) => {
         game.checkAnswerCounter  = game.checkAnswerCounter + 1;
         game.numRightAnswers  = game.numRightAnswers +1;
         game.answered.push(playerNumber);
+        game.memoryCounter = game.memoryCounter+1;
+        io.emit("incrementMemoryCounter");
         console.log("sequence: "+ game.sequence);
         console.log("answered: "+game.answered);
         console.log(game.numRightAnswers+" right");
@@ -149,6 +151,7 @@ io.on('connection', (socket) => {
           setTimeout(nextRound,500);
           game.resetAnswers();
           io.emit("wonRound");
+          io.emit("resetMemoryCounter");
 
         }
 
@@ -156,6 +159,7 @@ io.on('connection', (socket) => {
       else {
         game.resetAnswers();
         io.emit("wrongAnswer");
+        io.emit("resetMemoryCounter");
       }
 
     }
@@ -166,6 +170,18 @@ io.on('connection', (socket) => {
 
   })
 
+
+  socket.on("incrementGlobalMemoryCounter", ()=>{
+
+    io.emit("incrementMemoryCounter");
+
+  })
+
+  socket.on("resetGlobalMemoryCounter", ()=>{
+
+    io.emit("resetMemoryCounter");
+
+  })
 
    socket.on('playPattern', (numPlayers)=>{
     game.numPlayers = numPlayers

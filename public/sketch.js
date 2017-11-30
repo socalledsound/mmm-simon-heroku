@@ -274,9 +274,9 @@ function updateCheat() {
       li.css({"color" : "#000"});
       li.css({"width" : "80px"});
       li.css({"list-style-type" :"none"});
-      li.css({"display" : "inline"});
+      li.css({"display" : "inline-flex"});
       li.css({"margin-left" : "5px"});
-      li.css({"margin-right" : "10px"});
+      // li.css({"margin-right" : "5px"});
       li.css({"margin-top" : "10px"});
       li.css({"padding" : "5px 5px 5px 5px"});
       ul.append(li.text(cheatPlayer.name));
@@ -292,7 +292,7 @@ function trigPlayer(playerNum, moused) {
 	if(typeof moused != 'undefined' && moused) {
 		gameView.playerButton.turnOn();
 		playSound(playerNum);
-
+    return
 	}
 	// var currentArc = sequence[memoryCounter];
 	// console.log(this);
@@ -313,8 +313,9 @@ function trigPlayer(playerNum, moused) {
 
 		}
 
-		localGame.memoryCounter++;
-setTimeout(updateCheat,500);
+		// socket.emit("incrementGlobalMemoryCounter");
+    localGame.memoryCounter++;
+    setTimeout(updateCheat,500);
 		if(localGame.memoryCounter == localGame.sequence.length) {
 
 			clearInterval(thisRound);
@@ -324,8 +325,8 @@ setTimeout(updateCheat,500);
 				,600);
 			localGame.sequencePlaying = false;
 			gamePaused = false;
-			localGame.memoryCounter=0;
-    setTimeout(updateCheat,500);
+
+      setTimeout(finishedSequence,500);
 			// setTimeout(nextRound, tempo);
 			//setTimeout(awaitResponse, tempo);
 		}
@@ -339,6 +340,11 @@ setTimeout(updateCheat,500);
 
 }
 
+
+function finishedSequence() {
+  socket.emit("resetGlobalMemoryCounter");
+  updateCheat();
+}
 
 // trigArc = trigArc.bind(this);
  trigPlayer = trigPlayer.bind(this);
@@ -507,9 +513,7 @@ socket.on('startClientGame', function(game){
 socket.on('trigClientRound', function(game){
 	gamePaused = true;
 	gameView.sequencePlaying = true;
-	console.log(game.sequence);
 	localGame.sequence = game.sequence;
-	console.log(localGame.sequence);
   updateCheat();
 	// console.log(game.sequence);
 	// console.log(localSequence);
@@ -521,10 +525,14 @@ socket.on('trigClientRound', function(game){
 
 socket.on("wrongAnswer", function(){
 	wrongAnswerSound.play();
+  updateCheat();
+  // socket.emit("resetGlobalMemoryCounter");
 })
 
 socket.on("wonRound", function(){
 	 wonRoundSound.play();
+   updateCheat();
+  // socket.emit("resetGlobalMemoryCounter");
 	updateScoreboard();
 })
 
@@ -555,7 +563,16 @@ jQuery('#message-form').on('submit', function (e) {
      allMouseFollowers = mouseData;
   })
 
+socket.on("incrementMemoryCounter", function(){
+  localGame.memoryCounter++;
+  console.log("update memory counter: " + localGame.memoryCounter);
+  updateCheat();
+})
 
+socket.on("resetMemoryCounter", function(){
+  localGame.memoryCounter = 0;
+  updateCheat();
+})
 
 
   // function initOscillator() {
