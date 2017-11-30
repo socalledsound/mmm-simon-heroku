@@ -245,6 +245,24 @@ var sounds = [
   chosen: false,
   bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
   path:'/sounds/playSounds/wp-sh-2.mp3'
+},
+{
+  name: 'SO',
+  chosen: false,
+  bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+  path:'/sounds/playSounds/SO.mp3'
+},
+{
+  name: 'pinch',
+  chosen: false,
+  bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+  path:'/sounds/playSounds/pinch.mp3'
+},
+{
+  name: 'nani',
+  chosen: false,
+  bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+  path:'/sounds/playSounds/Nani.mp3'
 }
 
 
