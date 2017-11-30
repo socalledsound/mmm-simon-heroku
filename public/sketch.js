@@ -16,6 +16,7 @@ var osc, env;
 // var scoreboard = document.getElementById('scoreboard');
 var nameDiv = document.getElementById('name');
 var nameDiv = $('#name');
+var cheatDiv = $('#cheat');
 var scoreboard;
 var currentScore = 0;
 var startButton, jamButton, adminButtons;
@@ -136,7 +137,7 @@ function draw() {
 
 
 		});
-		
+
 
 
 
@@ -146,7 +147,7 @@ function draw() {
 
 
 	allMouseFollowers.forEach(function(mousefollower, index){
-		
+
 					// mousefollower.update();
 					mousefollower.initValue = mousefollower.initValue+1;
 					if(mousefollower.initValue > mousefollower.deathDelay) {
@@ -155,13 +156,13 @@ function draw() {
 					if(mousefollower.dead) {
 						allMouseFollowers.splice(index,1);
 					}
-		
+
 					fill(mousefollower.fillColor);
 					ellipse(mousefollower.x,mousefollower.y,40);
-		
+
 					// mousefollower.show();
-		
-		
+
+
 				});
 }
 
@@ -222,8 +223,8 @@ function readyPlayer() {
 
 	background(canvasBGcolor);
 	hideReadyButton();
-	
-	
+
+
 	 thisPlayer.ready = true;
 		gamePaused = false;
 	//	nameDiv.innerHTML = thisPlayer.name + "  :  " + currentSound.name;
@@ -257,47 +258,33 @@ function hideReadyButton () {
 	readyButton.css({"display" : "none"});
 }
 
+function updateCheat() {
+  var ul = $('<ul></ul>');
 
+  console.log("seq:"+ localGame.sequence);
+  if(typeof localGame.sequence != 'undefined') {
+    localGame.sequence.forEach(function(number, index){
+      var li = $('<li></li>');
+      var cheatPlayer = localPlayers[number];
+      var borderColor = (index === localGame.memoryCounter) ?  "10px solid #ffff00" : cheatPlayer.playerColor;
 
+      console.log(cheatPlayer.name);
+      li.css({ "background-color" : cheatPlayer.playerColor});
+       li.css({ "border" : borderColor});
+      li.css({"color" : "#000"});
+      li.css({"width" : "80px"});
+      li.css({"list-style-type" :"none"});
+      li.css({"display" : "inline"});
+      li.css({"margin-left" : "5px"});
+      li.css({"margin-right" : "10px"});
+      li.css({"margin-top" : "10px"});
+      li.css({"padding" : "5px 5px 5px 5px"});
+      ul.append(li.text(cheatPlayer.name));
 
-// function initOscillator() {
-//
-// 	  	//env = new p5.Env(t1, l1, t2, l2, t3, l3);
-// 	  	env = new p5.Env();
-// 			env.setADSR(0.01,0.1,0.5,0.01)
-// 			env.setRange(1.0,0);
-// 	   	osc = new p5.Oscillator();
-// 	  	osc.setType('sine');
-// 	  	osc.freq(240);
-// 	  	osc.amp(env);
-// 	  	osc.start();
-// }
-
-
-
-
-
-// function trigArc(player) {
-// 	var currentArc = typeof player != 'undefined'? player : localGame.sequence[localGame.memoryCounter];
-// 	// var currentArc = sequence[memoryCounter];
-// 	// console.log(this);
-// 	// console.log(player);
-// 	// console.log(localGame.sequence[localGame.memoryCounter])
-// 	// console.log(currentArc);
-// 	// console.log(gameView.arcs[currentArc]);
-// 	gameView.arcs[currentArc].turnOn();
-// 	playSound(currentArc);
-// 	localGame.memoryCounter++;
-// 	if(localGame.memoryCounter == localGame.sequence.length) {
-
-// 		clearInterval(thisRound);
-// 		localGame.sequencePlaying = false;
-// 		// setTimeout(nextRound, tempo);
-
-// 		//setTimeout(awaitResponse, tempo);
-// 	}
-// }
-
+    });
+    cheatDiv.html(ul);
+  }
+}
 
 
 function trigPlayer(playerNum, moused) {
@@ -305,6 +292,7 @@ function trigPlayer(playerNum, moused) {
 	if(typeof moused != 'undefined' && moused) {
 		gameView.playerButton.turnOn();
 		playSound(playerNum);
+
 	}
 	// var currentArc = sequence[memoryCounter];
 	// console.log(this);
@@ -322,9 +310,11 @@ function trigPlayer(playerNum, moused) {
 
 		if(currentNum === thisPlayer.playerNumber) {
 			playSound(currentNum);
+
 		}
 
 		localGame.memoryCounter++;
+setTimeout(updateCheat,500);
 		if(localGame.memoryCounter == localGame.sequence.length) {
 
 			clearInterval(thisRound);
@@ -335,6 +325,7 @@ function trigPlayer(playerNum, moused) {
 			localGame.sequencePlaying = false;
 			gamePaused = false;
 			localGame.memoryCounter=0;
+    setTimeout(updateCheat,500);
 			// setTimeout(nextRound, tempo);
 			//setTimeout(awaitResponse, tempo);
 		}
@@ -443,7 +434,7 @@ socket.on('adminSetup', function(){
 	numPlayers = players.filter((player)=> player.ready === true).length;
 	players.forEach((player,index)=> {
 		console.log(player.playerColor);
-		
+
     var li = $('<li></li>');
     var borderColor = player.ready ?  "10px solid #77ffff" : player.playerColor;
     li.css({ "background-color" : player.playerColor});
@@ -455,8 +446,8 @@ socket.on('adminSetup', function(){
 
 	   $('#players').html(ul);
 
-	
-	
+
+
 	readyPlayers = players.filter((player) => player.ready === true);
 	readyPlayers.forEach((player, index)=>{
 		player.playerNumber = index;
@@ -465,7 +456,7 @@ socket.on('adminSetup', function(){
 		}
 	});
 	localPlayers=readyPlayers;
-	
+
 // localPlayers.forEach((player)=>{
 // 	console.log(player.playerNumber);
 // })
@@ -476,20 +467,20 @@ socket.on('adminSetup', function(){
 // 	thisLocalPlayer = localPlayers.filter((localPlayer) =>   localPlayer.name == thisPlayer.name );
 // 		console.log("thislocalplayer: " + thisLocalPlayer.name);
 // 		if(thisPlayer.playerNumber === -1){
-	
+
 // 		 thisPlayer.playerNumber = thisLocalPlayer.playerNumber;
-	
+
 // 	 }
 // }
 
-	
+
 	if (typeof gameView != 'undefined') {
-		gameView.playerNumber = thisPlayer.playerNumber;	
+		gameView.playerNumber = thisPlayer.playerNumber;
 				gameView.updatePlayers(localPlayers,numPlayers);
-		
+
 				}
 
-	})				
+	})
   // socket.on('updatePlayerReadyList', function(players){
   //   var ul = $('<ul></ul>');
   //   console.log(players);
@@ -519,6 +510,7 @@ socket.on('trigClientRound', function(game){
 	console.log(game.sequence);
 	localGame.sequence = game.sequence;
 	console.log(localGame.sequence);
+  updateCheat();
 	// console.log(game.sequence);
 	// console.log(localSequence);
 	setTimeout(function() {
@@ -562,3 +554,44 @@ jQuery('#message-form').on('submit', function (e) {
     // console.log(mouseData);
      allMouseFollowers = mouseData;
   })
+
+
+
+
+  // function initOscillator() {
+  //
+  // 	  	//env = new p5.Env(t1, l1, t2, l2, t3, l3);
+  // 	  	env = new p5.Env();
+  // 			env.setADSR(0.01,0.1,0.5,0.01)
+  // 			env.setRange(1.0,0);
+  // 	   	osc = new p5.Oscillator();
+  // 	  	osc.setType('sine');
+  // 	  	osc.freq(240);
+  // 	  	osc.amp(env);
+  // 	  	osc.start();
+  // }
+
+
+
+
+
+  // function trigArc(player) {
+  // 	var currentArc = typeof player != 'undefined'? player : localGame.sequence[localGame.memoryCounter];
+  // 	// var currentArc = sequence[memoryCounter];
+  // 	// console.log(this);
+  // 	// console.log(player);
+  // 	// console.log(localGame.sequence[localGame.memoryCounter])
+  // 	// console.log(currentArc);
+  // 	// console.log(gameView.arcs[currentArc]);
+  // 	gameView.arcs[currentArc].turnOn();
+  // 	playSound(currentArc);
+  // 	localGame.memoryCounter++;
+  // 	if(localGame.memoryCounter == localGame.sequence.length) {
+
+  // 		clearInterval(thisRound);
+  // 		localGame.sequencePlaying = false;
+  // 		// setTimeout(nextRound, tempo);
+
+  // 		//setTimeout(awaitResponse, tempo);
+  // 	}
+  // }
