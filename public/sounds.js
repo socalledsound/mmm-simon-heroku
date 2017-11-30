@@ -263,7 +263,14 @@ var sounds = [
   chosen: false,
   bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
   path:'/sounds/playSounds/Nani.mp3'
+},
+{
+  name: 'Sanama',
+  chosen: false,
+  bgColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+  path:'/sounds/playSounds/Sanama.mp3'
 }
+
 
 
 ];
