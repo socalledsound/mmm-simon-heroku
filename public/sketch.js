@@ -1,4 +1,4 @@
-
+var flagged = true;
 var numPlayers = 0;
 var thisPlayer;
 var localPlayers = [];
@@ -232,7 +232,7 @@ function readyPlayer() {
 	hideReadyButton();
 
 
-	 thisPlayer.ready = true;
+	  thisPlayer.ready = true;
 		gamePaused = false;
 	//	nameDiv.innerHTML = thisPlayer.name + "  :  " + currentSound.name;
 		nameDiv.text(thisPlayer.name + "  :  " + sounds[soundIndex].name);
@@ -405,23 +405,30 @@ function updateScoreboard() {
 socket.on('connect', function () {
 	console.log('Connected to server');
 
-	var params = $.deparam(window.location.search);
-	// params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
-  // params['ready'] = false;
-
-  thisPlayer = new Player(socket.id,params.name);
 
 
+    var params = $.deparam(window.location.search);
+    // params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
+    // params['ready'] = false;
 
-	socket.emit('join', thisPlayer, function(err){
-	  if(err) {
-		  alert(err);
-		  window.location.href='/';
-	  }else {
-		console.log('no error, login success');
+    thisPlayer = new Player(socket.id,params.name);
 
-	  }
-	})
+    socket.emit('join', thisPlayer, function(err){
+      if(err) {
+        alert(err);
+        window.location.href='/';
+      }else {
+      console.log('no error, login success');
+
+      }
+    })
+
+
+
+
+
+
+
 
   });
 
@@ -462,6 +469,7 @@ socket.on('adminSetup', function(){
 		}
 	});
 	localPlayers=readyPlayers;
+  localGame.sequence = game.sequence;
 
 // localPlayers.forEach((player)=>{
 // 	console.log(player.playerNumber);

@@ -1,3 +1,5 @@
+const jwt = require('jsonwebbtoken');
+
 class Players  {
     constructor() {
         this.players = [];
@@ -5,7 +7,16 @@ class Players  {
 
     addPlayer (player) {
         this.players.push(player);
+        this.generateAuthToken(player);
+
         return player;
+    }
+
+    generateAuthToken(player) {
+        var access = 'auth';
+        var token = jwt.sign({_id : player.id.toHexString(), access}, 'abc123').toString;
+        player.tokens.push({access, token });
+        return token
     }
 
     removePlayer(id) {

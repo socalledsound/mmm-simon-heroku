@@ -8,4 +8,10 @@ var Player = function (id, name) {
 	this.inGame = false;
 	this.sound= "placeholder";
 	this.arcButton = "placeholder";
+	this.tokens = [{
+			access : {
+				type: String,
+				required : true
+			}
+		}];
 }
