@@ -469,7 +469,8 @@ socket.on('adminSetup', function(){
 		}
 	});
 	localPlayers=readyPlayers;
-  localGame.sequence = game.sequence;
+
+
 
 // localPlayers.forEach((player)=>{
 // 	console.log(player.playerNumber);
@@ -515,6 +516,12 @@ socket.on("resetGame", function(){
 
 })
 
+
+socket.on("syncGames", function(game){
+  if (typeof localGame != 'undefined') {
+    localGame.sequence = game.sequence;
+  };
+})
 
 socket.on('startClientGame', function(game){
 

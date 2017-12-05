@@ -80,6 +80,7 @@ io.on('connection', (socket) => {
 
 
       io.emit('updatePlayerList', players.getPlayerList());
+      io.emit('syncGames', game);
 
         console.log(players);
       // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
