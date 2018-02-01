@@ -89,15 +89,8 @@ function setup() {
   $('#sounds').html(ul);
 
 
-currentSound = loadedSounds[0];
- console.log(sounds[soundIndex].name);
-  // for(var i=0; i<numPlayers; i++) {
-  //   // console.log("begin arcLegnth:"+arcLength);
-  //   arcs[i] = new ArcButton(i,width/2,height/2, options.arcDiameter, radians(i*options.arcLength), radians(options.arcLength+(i*options.arcLength)), colors[i%4]);
-  //    arcs[i].turnOff();
-  // };
+  currentSound = loadedSounds[0];
 
-	//maybe start button does go back here actually, and then it triggers a 'loading' visual
 
 }
 
@@ -136,9 +129,6 @@ function draw() {
 
       fill(mousefollower.fillColor);
       ellipse(mousefollower.x,mousefollower.y,40);
-
-      // mousefollower.show();
-
 
 		});
 
@@ -199,11 +189,6 @@ function mousePressed() {
 	if(!gamePaused) {
 		var clicked = inRect();
 		if(clicked) {
-			// var pos = getRad();
-			// //var clickedArc = 10;
-			// var clickedArc = gameView.arcs.filter((arc,i) => (pos > arc.start_arc && pos < arc.end_arc),this);
-   //    console.log(clickedArc);
-//			var player = clickedArc[0].id;
 			trigPlayer(thisPlayer.playerNumber, true);
       if (thisPlayer.inGame) {
         socket.emit("checkMouseClick", thisPlayer.playerNumber);
@@ -223,14 +208,10 @@ function initReadyButton() {
 }
 
 
-
-
-
 function readyPlayer() {
 
 	background(canvasBGcolor);
 	hideReadyButton();
-
 
 	  thisPlayer.ready = true;
 		gamePaused = false;
@@ -239,13 +220,8 @@ function readyPlayer() {
 		nameDiv.css({"background-color" : thisPlayer.playerColor})
     $('#message-wrapper').css({"background-color" : thisPlayer.playerColor})
 
-
-
 	gameView = new GameView(numPlayers, thisPlayer.playerNumber, thisPlayer.playerColor, currentScore);
 	gameView.init();
-	// scoreboard = new Scoreboard(currentScore);
-	// scoreboard.show();
-    // localGame.memoryCounter = 0;
 
   console.log(thisPlayer);
 
@@ -351,12 +327,6 @@ function finishedSequence() {
 
 
 function playSound(index) {
-
-  // console.log(gameView.freqs[index]);
-	// osc.freq(gameView.freqs[index]);
-	// env.play(osc);
-  //
-
   currentSound.play();
   console.log("playing");
 
@@ -403,14 +373,8 @@ function updateScoreboard() {
 //socket stuff
 
 socket.on('connect', function () {
-	console.log('Connected to server');
-
-
-
+	
     var params = $.deparam(window.location.search);
-    // params['color'] = '#'+Math.floor(Math.random()*16777215).toString(16);
-    // params['ready'] = false;
-
     thisPlayer = new Player(socket.id,params.name);
 
     socket.emit('join', thisPlayer, function(err){
@@ -419,17 +383,8 @@ socket.on('connect', function () {
         window.location.href='/';
       }else {
       console.log('no error, login success');
-
       }
     })
-
-
-
-
-
-
-
-
   });
 
 
@@ -470,25 +425,6 @@ socket.on('adminSetup', function(){
 	});
 	localPlayers=readyPlayers;
 
-
-
-// localPlayers.forEach((player)=>{
-// 	console.log(player.playerNumber);
-// })
-// if(localPlayers.length > 0) {
-
-// 	console.log(localPlayers[0].name);
-// 	console.log(thisPlayer.name);
-// 	thisLocalPlayer = localPlayers.filter((localPlayer) =>   localPlayer.name == thisPlayer.name );
-// 		console.log("thislocalplayer: " + thisLocalPlayer.name);
-// 		if(thisPlayer.playerNumber === -1){
-
-// 		 thisPlayer.playerNumber = thisLocalPlayer.playerNumber;
-
-// 	 }
-// }
-
-
 	if (typeof gameView != 'undefined') {
 		gameView.playerNumber = thisPlayer.playerNumber;
 				gameView.updatePlayers(localPlayers,numPlayers);
@@ -496,18 +432,7 @@ socket.on('adminSetup', function(){
 				}
 
 	})
-  // socket.on('updatePlayerReadyList', function(players){
-  //   var ul = $('<ul></ul>');
-  //   console.log(players);
-  //   players.forEach((player)=> {
-  //     var li = $('<li></li>');
-  //     li.css({ "background-color" : player.color});
-  //     li.css({ "color" : "white" });
-  //     li.css({ "border" : "10px solid #ffff00"});
-  //     ul.append(li.text(player.name));
-  //   })
-  //   $('#players').html(ul);
-  // })
+
 
 socket.on("resetGame", function(){
   if(typeof thisRound != 'undefined') {
@@ -557,8 +482,7 @@ console.log("in sequence ::: :: " + inSequence);
 
 
   updateCheat();
-	// console.log(game.sequence);
-	// console.log(localSequence);
+
 	setTimeout(function() {
 	 	thisRound = setInterval(trigPlayer, localGame.tempo);
 	 },localGame.tempo);
@@ -616,41 +540,3 @@ socket.on("resetMemoryCounter", function(){
   updateCheat();
 })
 
-
-  // function initOscillator() {
-  //
-  // 	  	//env = new p5.Env(t1, l1, t2, l2, t3, l3);
-  // 	  	env = new p5.Env();
-  // 			env.setADSR(0.01,0.1,0.5,0.01)
-  // 			env.setRange(1.0,0);
-  // 	   	osc = new p5.Oscillator();
-  // 	  	osc.setType('sine');
-  // 	  	osc.freq(240);
-  // 	  	osc.amp(env);
-  // 	  	osc.start();
-  // }
-
-
-
-
-
-  // function trigArc(player) {
-  // 	var currentArc = typeof player != 'undefined'? player : localGame.sequence[localGame.memoryCounter];
-  // 	// var currentArc = sequence[memoryCounter];
-  // 	// console.log(this);
-  // 	// console.log(player);
-  // 	// console.log(localGame.sequence[localGame.memoryCounter])
-  // 	// console.log(currentArc);
-  // 	// console.log(gameView.arcs[currentArc]);
-  // 	gameView.arcs[currentArc].turnOn();
-  // 	playSound(currentArc);
-  // 	localGame.memoryCounter++;
-  // 	if(localGame.memoryCounter == localGame.sequence.length) {
-
-  // 		clearInterval(thisRound);
-  // 		localGame.sequencePlaying = false;
-  // 		// setTimeout(nextRound, tempo);
-
-  // 		//setTimeout(awaitResponse, tempo);
-  // 	}
-  // }
